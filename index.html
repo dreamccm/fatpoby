@@ -1,0 +1,914 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>편마비 라이프 허브 | Hemiplegia Life Hub</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
+<style>
+  :root {
+    --teal: #1D9E75; --teal-light: #E1F5EE; --teal-mid: #9FE1CB; --teal-dark: #085041;
+    --blue-light: #E6F1FB; --blue: #185FA5; --blue-mid: #B5D4F4;
+    --amber-light: #FAEEDA; --amber: #854F0B;
+    --purple-light: #EEEDFE; --purple: #534AB7;
+    --green-light: #EAF3DE; --green: #3B6D11;
+    --pink-light: #FBEAF0; --pink: #993556;
+    --gray-light: #F1EFE8; --gray: #5F5E5A; --gray-mid: #D3D1C7;
+    --red-light: #FCEBEB; --red: #A32D2D;
+    --text: #1a1a1a; --text-sec: #555; --text-ter: #999;
+    --bg: #fff; --bg-sec: #f8f8f6; --bg-ter: #f0efe9;
+    --border: rgba(0,0,0,0.12); --border-med: rgba(0,0,0,0.22);
+    --radius: 8px; --radius-lg: 12px; --radius-xl: 16px;
+    --shadow: 0 2px 12px rgba(0,0,0,0.08);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --text: #e8e8e4; --text-sec: #aaa; --text-ter: #666;
+      --bg: #1c1c1a; --bg-sec: #242422; --bg-ter: #2c2c28;
+      --border: rgba(255,255,255,0.1); --border-med: rgba(255,255,255,0.2);
+      --teal-light: #04342C; --blue-light: #042C53; --amber-light: #412402;
+      --purple-light: #26215C; --green-light: #173404; --pink-light: #4B1528; --gray-light: #2C2C2A;
+    }
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg-ter); color: var(--text); min-height: 100vh; font-size: 15px; line-height: 1.6; }
+
+  /* Layout */
+  .site-wrap { max-width: 1100px; margin: 0 auto; background: var(--bg); min-height: 100vh; box-shadow: var(--shadow); }
+  .topbar { display: flex; align-items: center; justify-content: space-between; padding: 14px 24px; border-bottom: 1px solid var(--border); background: var(--bg); position: sticky; top: 0; z-index: 100; }
+  .logo { display: flex; align-items: center; gap: 10px; }
+  .logo-icon { width: 32px; height: 32px; border-radius: 8px; background: var(--teal); display: flex; align-items: center; justify-content: center; color: #fff; font-size: 16px; }
+  .logo-texts .name { font-size: 15px; font-weight: 600; }
+  .logo-texts .sub { font-size: 11px; color: var(--text-ter); }
+  .topbar-right { display: flex; align-items: center; gap: 8px; }
+  .lang-toggle { display: flex; border: 1px solid var(--border-med); border-radius: var(--radius); overflow: hidden; }
+  .lang-btn { padding: 5px 12px; font-size: 12px; cursor: pointer; border: none; background: transparent; color: var(--text-sec); font-family: inherit; transition: background 0.15s; }
+  .lang-btn.active { background: var(--bg-sec); color: var(--text); font-weight: 600; }
+  .btn { display: inline-flex; align-items: center; gap: 6px; padding: 7px 14px; border-radius: var(--radius); border: 1px solid var(--border-med); background: transparent; color: var(--text); font-size: 13px; cursor: pointer; font-family: inherit; transition: all 0.15s; }
+  .btn:hover { background: var(--bg-sec); }
+  .btn-primary { background: var(--teal); color: #fff; border-color: var(--teal); }
+  .btn-primary:hover { background: #178a63; border-color: #178a63; }
+  .btn-danger { border-color: var(--red); color: var(--red); }
+  .btn-danger:hover { background: var(--red-light); }
+
+  /* Nav */
+  .nav { display: flex; gap: 0; border-bottom: 1px solid var(--border); padding: 0 24px; background: var(--bg); overflow-x: auto; }
+  .nav::-webkit-scrollbar { display: none; }
+  .nav-item { padding: 11px 16px; font-size: 13px; cursor: pointer; color: var(--text-sec); border-bottom: 2px solid transparent; margin-bottom: -1px; transition: all 0.15s; white-space: nowrap; }
+  .nav-item.active { color: var(--teal); border-bottom-color: var(--teal); font-weight: 600; }
+  .nav-item:hover:not(.active) { color: var(--text); }
+
+  /* Main layout */
+  .main { display: grid; grid-template-columns: 1fr 220px; min-height: calc(100vh - 112px); }
+  @media (max-width: 700px) { .main { grid-template-columns: 1fr; } .sidebar { display: none; } }
+  .content { padding: 24px; border-right: 1px solid var(--border); }
+  .sidebar { padding: 20px 16px; }
+
+  /* Cards */
+  .card { border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 16px; margin-bottom: 12px; cursor: pointer; transition: border-color 0.15s, box-shadow 0.15s; background: var(--bg); }
+  .card:hover { border-color: var(--border-med); box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+  .card-top { display: flex; align-items: flex-start; gap: 12px; }
+  .card-icon { width: 38px; height: 38px; border-radius: var(--radius); display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
+  .card-body { flex: 1; min-width: 0; }
+  .card-title { font-size: 14px; font-weight: 600; margin-bottom: 4px; line-height: 1.4; }
+  .card-desc { font-size: 12px; color: var(--text-sec); line-height: 1.5; margin-bottom: 8px; }
+  .card-meta { font-size: 11px; color: var(--text-ter); display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .card-meta i { font-size: 12px; }
+
+  /* Badges */
+  .badge { font-size: 10px; font-weight: 600; padding: 2px 8px; border-radius: 99px; display: inline-block; margin-bottom: 5px; }
+  .badge-teal { background: var(--teal-light); color: var(--teal-dark); }
+  .badge-blue { background: var(--blue-light); color: var(--blue); }
+  .badge-amber { background: var(--amber-light); color: var(--amber); }
+  .badge-purple { background: var(--purple-light); color: var(--purple); }
+  .badge-green { background: var(--green-light); color: var(--green); }
+  .badge-pink { background: var(--pink-light); color: var(--pink); }
+  .badge-gray { background: var(--gray-light); color: var(--gray); }
+
+  /* Journal media */
+  .media-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 8px; margin: 10px 0; }
+  .media-thumb { position: relative; border-radius: var(--radius); overflow: hidden; aspect-ratio: 4/3; background: var(--bg-sec); border: 1px solid var(--border); cursor: pointer; }
+  .media-thumb img { width: 100%; height: 100%; object-fit: cover; }
+  .media-thumb video { width: 100%; height: 100%; object-fit: cover; }
+  .media-thumb .play-overlay { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.3); color: #fff; font-size: 24px; }
+  .embed-wrap { position: relative; padding-bottom: 56.25%; height: 0; border-radius: var(--radius); overflow: hidden; border: 1px solid var(--border); margin: 10px 0; }
+  .embed-wrap iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: none; }
+
+  /* Hero */
+  .hero { background: linear-gradient(135deg, var(--teal-light), var(--blue-light)); border-radius: var(--radius-xl); padding: 22px; margin-bottom: 20px; border: 1px solid var(--teal-mid); }
+  .hero-title { font-size: 18px; font-weight: 700; color: var(--teal-dark); margin-bottom: 6px; }
+  .hero-sub { font-size: 13px; color: var(--teal); line-height: 1.6; }
+  .hero-stats { display: flex; gap: 20px; margin-top: 14px; }
+  .hero-stat-num { font-size: 22px; font-weight: 700; color: var(--teal); }
+  .hero-stat-label { font-size: 11px; color: var(--text-sec); }
+
+  /* Filters */
+  .filter-row { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 14px; }
+  .chip { font-size: 12px; padding: 5px 12px; border-radius: 99px; border: 1px solid var(--border-med); color: var(--text-sec); cursor: pointer; transition: all 0.15s; background: transparent; font-family: inherit; }
+  .chip.active { background: var(--teal); color: #fff; border-color: var(--teal); }
+  .chip:hover:not(.active) { border-color: var(--teal); color: var(--teal); }
+
+  /* Search */
+  .search-bar { display: flex; align-items: center; gap: 8px; background: var(--bg-sec); border-radius: var(--radius); padding: 8px 14px; margin-bottom: 14px; border: 1px solid var(--border); }
+  .search-bar input { border: none; background: transparent; font-size: 13px; color: var(--text); flex: 1; outline: none; font-family: inherit; }
+
+  /* Section headers */
+  .sec-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+  .sec-title { font-size: 15px; font-weight: 600; }
+  .count-badge { font-size: 11px; padding: 2px 8px; border-radius: 99px; background: var(--teal-light); color: var(--teal-dark); font-weight: 600; }
+
+  /* Notice */
+  .notice { border-left: 3px solid var(--teal); padding: 10px 14px; border-radius: 0 var(--radius) var(--radius) 0; background: var(--bg-sec); margin-bottom: 12px; font-size: 13px; color: var(--text-sec); line-height: 1.6; }
+  .notice-date { font-size: 11px; color: var(--text-ter); margin-top: 4px; }
+
+  /* Sidebar widgets */
+  .sw { margin-bottom: 20px; }
+  .sw-title { font-size: 11px; font-weight: 700; color: var(--text-ter); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 10px; }
+  .tag-cloud { display: flex; flex-wrap: wrap; gap: 5px; }
+  .tag { font-size: 11px; padding: 3px 9px; border-radius: 99px; border: 1px solid var(--border); color: var(--text-sec); cursor: pointer; transition: all 0.15s; }
+  .tag:hover { border-color: var(--teal); color: var(--teal); }
+  .stat-row { display: flex; justify-content: space-between; align-items: center; padding: 6px 0; border-bottom: 1px solid var(--border); font-size: 12px; }
+  .stat-label { color: var(--text-sec); }
+  .stat-val { font-weight: 600; }
+  .quick-link { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--blue); cursor: pointer; padding: 4px 0; }
+  .quick-link:hover { text-decoration: underline; }
+
+  /* Tabs */
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+
+  /* Rehab tracker */
+  .rehab-week { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; margin-bottom: 18px; }
+  .rehab-day { text-align: center; }
+  .rehab-day-label { font-size: 10px; color: var(--text-ter); margin-bottom: 4px; }
+  .rehab-day-box { height: 32px; border-radius: var(--radius); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 13px; transition: all 0.15s; cursor: pointer; }
+  .rehab-day-box.done { background: var(--teal); border-color: var(--teal); color: #fff; }
+  .rehab-day-box.today { border: 2px solid var(--teal); }
+  .goal-item { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-bottom: 1px solid var(--border); }
+  .goal-check { width: 20px; height: 20px; border-radius: 50%; border: 1.5px solid var(--border-med); display: flex; align-items: center; justify-content: center; cursor: pointer; flex-shrink: 0; transition: all 0.15s; font-size: 11px; }
+  .goal-check.done { background: var(--teal); border-color: var(--teal); color: #fff; }
+  .goal-text { font-size: 13px; flex: 1; }
+  .goal-text.done { text-decoration: line-through; color: var(--text-sec); }
+
+  /* Modal overlay */
+  .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center; padding: 20px; }
+  .modal-overlay.open { display: flex; }
+  .modal { background: var(--bg); border-radius: var(--radius-xl); padding: 28px; width: 100%; max-width: 560px; max-height: 90vh; overflow-y: auto; box-shadow: 0 8px 40px rgba(0,0,0,0.2); }
+  .modal-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
+  .modal-title { font-size: 17px; font-weight: 700; }
+  .modal-close { border: none; background: none; font-size: 20px; cursor: pointer; color: var(--text-sec); padding: 4px; }
+
+  /* Form */
+  .form-group { margin-bottom: 16px; }
+  label { font-size: 12px; font-weight: 600; color: var(--text-sec); display: block; margin-bottom: 5px; }
+  input[type="text"], input[type="url"], textarea, select {
+    width: 100%; padding: 9px 12px; border: 1px solid var(--border-med); border-radius: var(--radius);
+    background: var(--bg); color: var(--text); font-size: 13px; font-family: inherit; outline: none; transition: border-color 0.15s;
+  }
+  input[type="text"]:focus, input[type="url"]:focus, textarea:focus, select:focus { border-color: var(--teal); box-shadow: 0 0 0 3px rgba(29,158,117,0.12); }
+  textarea { min-height: 80px; resize: vertical; }
+  select { appearance: none; cursor: pointer; }
+
+  /* File upload */
+  .upload-zone { border: 2px dashed var(--border-med); border-radius: var(--radius-lg); padding: 24px; text-align: center; cursor: pointer; transition: all 0.15s; background: var(--bg-sec); }
+  .upload-zone:hover, .upload-zone.drag { border-color: var(--teal); background: var(--teal-light); }
+  .upload-zone input[type="file"] { display: none; }
+  .upload-zone-icon { font-size: 28px; color: var(--text-ter); margin-bottom: 8px; }
+  .upload-zone-text { font-size: 13px; color: var(--text-sec); }
+  .upload-zone-sub { font-size: 11px; color: var(--text-ter); margin-top: 4px; }
+  .upload-preview { display: grid; grid-template-columns: repeat(auto-fill, minmax(90px, 1fr)); gap: 8px; margin-top: 12px; }
+  .upload-preview-item { position: relative; aspect-ratio: 1; border-radius: var(--radius); overflow: hidden; border: 1px solid var(--border); }
+  .upload-preview-item img, .upload-preview-item video { width: 100%; height: 100%; object-fit: cover; }
+  .upload-preview-remove { position: absolute; top: 3px; right: 3px; width: 20px; height: 20px; border-radius: 50%; background: rgba(0,0,0,0.6); color: #fff; border: none; cursor: pointer; font-size: 11px; display: flex; align-items: center; justify-content: center; }
+
+  /* Embed URL input */
+  .embed-preview { margin-top: 10px; border-radius: var(--radius); overflow: hidden; background: var(--bg-sec); border: 1px solid var(--border); }
+  .embed-preview iframe { width: 100%; height: 180px; border: none; display: block; }
+  .embed-preview .embed-placeholder { padding: 20px; text-align: center; font-size: 12px; color: var(--text-ter); }
+
+  /* Lightbox */
+  .lightbox { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.92); z-index: 2000; align-items: center; justify-content: center; }
+  .lightbox.open { display: flex; }
+  .lightbox-inner { position: relative; max-width: 90vw; max-height: 90vh; }
+  .lightbox-inner img, .lightbox-inner video { max-width: 90vw; max-height: 85vh; border-radius: var(--radius); display: block; }
+  .lightbox-close { position: absolute; top: -36px; right: 0; color: #fff; background: none; border: none; font-size: 28px; cursor: pointer; }
+
+  /* About */
+  .about-body { font-size: 14px; color: var(--text-sec); line-height: 1.8; max-width: 500px; }
+
+  /* Utility */
+  .flex { display: flex; }
+  .gap-8 { gap: 8px; }
+  .mt-12 { margin-top: 12px; }
+  .empty { text-align: center; padding: 48px 20px; color: var(--text-ter); font-size: 14px; }
+  .empty i { font-size: 32px; display: block; margin-bottom: 10px; }
+  .divider { border: none; border-top: 1px solid var(--border); margin: 16px 0; }
+
+  /* Video icon overlay */
+  .vid-icon { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.25); color: #fff; font-size: 22px; pointer-events: none; }
+</style>
+</head>
+<body>
+<div class="site-wrap">
+
+  <!-- Top Bar -->
+  <header class="topbar">
+    <div class="logo">
+      <div class="logo-icon"><i class="ti ti-heart-handshake"></i></div>
+      <div class="logo-texts">
+        <div class="name" id="logo-name">편마비 라이프 허브</div>
+        <div class="sub" id="logo-sub">정보 · 회복 · 일상</div>
+      </div>
+    </div>
+    <div class="topbar-right">
+      <button class="btn btn-primary" onclick="openPostModal()"><i class="ti ti-pencil-plus"></i><span id="btn-write">새 포스팅</span></button>
+      <div class="lang-toggle">
+        <button class="lang-btn active" id="btn-ko" onclick="setLang('ko')">한국어</button>
+        <button class="lang-btn" id="btn-en" onclick="setLang('en')">English</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Nav -->
+  <nav class="nav">
+    <div class="nav-item active" id="nav-home" onclick="showTab('home')" data-ko="홈" data-en="Home">홈</div>
+    <div class="nav-item" id="nav-info" onclick="showTab('info')" data-ko="정보 게시판" data-en="Info Board">정보 게시판</div>
+    <div class="nav-item" id="nav-journal" onclick="showTab('journal')" data-ko="저널" data-en="Journal">저널</div>
+    <div class="nav-item" id="nav-rehab" onclick="showTab('rehab')" data-ko="재활 트래커" data-en="Rehab Tracker">재활 트래커</div>
+    <div class="nav-item" id="nav-about" onclick="showTab('about')" data-ko="소개" data-en="About">소개</div>
+  </nav>
+
+  <!-- Main -->
+  <div class="main">
+    <div class="content">
+
+      <!-- HOME -->
+      <div class="tab-panel active" id="tab-home">
+        <div class="hero">
+          <div class="hero-title" id="hero-title">뇌경색 편마비, 혼자가 아닙니다</div>
+          <div class="hero-sub" id="hero-sub">재활 정보·일상 팁·개인 경험을 한곳에 모았습니다. 한국어·영어로 제공됩니다.</div>
+          <div class="hero-stats">
+            <div><div class="hero-stat-num" id="stat-info-count">0</div><div class="hero-stat-label" id="stat1-lbl">정보 글</div></div>
+            <div><div class="hero-stat-num" id="stat-journal-count">0</div><div class="hero-stat-label" id="stat2-lbl">저널 포스트</div></div>
+          </div>
+        </div>
+        <div class="sec-header">
+          <div class="sec-title" id="home-recent-title">최신 업데이트</div>
+        </div>
+        <div id="home-recent-list"></div>
+        <div class="notice">
+          <span id="notice-text">이 사이트의 정보는 의학적 조언을 대체하지 않습니다. 치료 결정은 반드시 담당 의료진과 상의하세요.</span>
+          <div class="notice-date" id="notice-author">운영자 공지</div>
+        </div>
+      </div>
+
+      <!-- INFO BOARD -->
+      <div class="tab-panel" id="tab-info">
+        <div class="search-bar"><i class="ti ti-search" style="color:var(--text-ter)"></i><input id="search-input" placeholder="정보 검색..." oninput="renderInfo()"></div>
+        <div class="filter-row" id="filter-row">
+          <button class="chip active" onclick="setInfoFilter('all',this)" data-ko="전체" data-en="All">전체</button>
+          <button class="chip" onclick="setInfoFilter('rehab',this)" data-ko="재활" data-en="Rehab">재활</button>
+          <button class="chip" onclick="setInfoFilter('med',this)" data-ko="의학/약물" data-en="Medical">의학/약물</button>
+          <button class="chip" onclick="setInfoFilter('daily',this)" data-ko="일상보조" data-en="Daily Aids">일상보조</button>
+          <button class="chip" onclick="setInfoFilter('mental',this)" data-ko="심리/정서" data-en="Mental Health">심리/정서</button>
+          <button class="chip" onclick="setInfoFilter('diet',this)" data-ko="식이요법" data-en="Nutrition">식이요법</button>
+        </div>
+        <div id="info-list"></div>
+      </div>
+
+      <!-- JOURNAL -->
+      <div class="tab-panel" id="tab-journal">
+        <div class="filter-row">
+          <button class="chip active" onclick="setJFilter('all',this)" data-ko="전체" data-en="All">전체</button>
+          <button class="chip" onclick="setJFilter('cartoon',this)" data-ko="카툰" data-en="Cartoon">카툰</button>
+          <button class="chip" onclick="setJFilter('note',this)" data-ko="노트" data-en="Note">노트</button>
+        </div>
+        <div id="journal-list"></div>
+      </div>
+
+      <!-- REHAB TRACKER -->
+      <div class="tab-panel" id="tab-rehab">
+        <div class="sec-header">
+          <div class="sec-title" id="rehab-week-title">이번 주 재활 기록</div>
+          <span class="count-badge" id="rehab-month-badge">2026년 6월</span>
+        </div>
+        <div class="rehab-week" id="rehab-grid"></div>
+        <div class="card" style="margin-bottom:14px">
+          <div class="sec-title" style="margin-bottom:12px" id="rehab-goals-title">이번 주 목표</div>
+          <div id="goal-list"></div>
+        </div>
+        <button class="btn btn-primary" onclick="openGoalModal()"><i class="ti ti-target"></i><span id="btn-add-goal">목표 추가</span></button>
+      </div>
+
+      <!-- ABOUT -->
+      <div class="tab-panel" id="tab-about">
+        <div class="sec-title" style="margin-bottom:12px" id="about-title">이 사이트에 대해</div>
+        <p class="about-body" id="about-body">뇌경색으로 인한 편마비를 겪으며 수집한 정보와 개인적인 경험을 기록하는 공간입니다. 정확한 의학 정보를 전달하고, 비슷한 상황에 있는 분들과 연결되고자 만들었습니다.<br><br>카툰과 노트 이미지로 일상을 솔직하게 담습니다. 완벽하지 않아도 괜찮습니다. 오늘 하루도 잘 하고 계십니다.</p>
+        <hr class="divider">
+        <div class="about-body" style="font-size:12px;color:var(--text-ter)">
+          <strong style="color:var(--text-sec)">기술 스택:</strong> 순수 HTML / CSS / JS · localStorage 저장 · FileReader API로 이미지/동영상 로컬 임베드 · YouTube/Vimeo URL 임베드 지원
+        </div>
+      </div>
+
+    </div>
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <div class="sw">
+        <div class="sw-title" id="sw-tags">인기 태그</div>
+        <div class="tag-cloud">
+          <span class="tag" onclick="filterByTag('#보행훈련')">#보행훈련</span>
+          <span class="tag" onclick="filterByTag('#항혈전제')">#항혈전제</span>
+          <span class="tag" onclick="filterByTag('#작업치료')">#작업치료</span>
+          <span class="tag" onclick="filterByTag('#연하장애')">#연하장애</span>
+          <span class="tag" onclick="filterByTag('#우울감')">#우울감</span>
+          <span class="tag" onclick="filterByTag('#보조기구')">#보조기구</span>
+          <span class="tag">#hemiplegia</span>
+          <span class="tag">#stroke</span>
+        </div>
+      </div>
+      <div class="sw">
+        <div class="sw-title" id="sw-stats">사이트 현황</div>
+        <div class="stat-row"><span class="stat-label" id="sl1">정보 게시글</span><span class="stat-val" id="sl1-val">0</span></div>
+        <div class="stat-row"><span class="stat-label" id="sl2">저널 포스트</span><span class="stat-val" id="sl2-val">0</span></div>
+        <div class="stat-row"><span class="stat-label" id="sl3">최근 업데이트</span><span class="stat-val" id="sl3-val">-</span></div>
+      </div>
+      <div class="sw">
+        <div class="sw-title" id="sw-links">빠른 링크</div>
+        <div class="quick-link"><i class="ti ti-alert-circle"></i> <span id="ql1">응급상황 대처법</span></div>
+        <div class="quick-link"><i class="ti ti-building-hospital"></i> <span id="ql2">재활병원 선택 가이드</span></div>
+        <div class="quick-link"><i class="ti ti-file-certificate"></i> <span id="ql3">복지 혜택 신청</span></div>
+      </div>
+    </aside>
+  </div>
+</div>
+
+<!-- POST MODAL -->
+<div class="modal-overlay" id="post-modal">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title" id="modal-title">새 포스팅</div>
+      <button class="modal-close" onclick="closePostModal()"><i class="ti ti-x"></i></button>
+    </div>
+
+    <div class="form-group">
+      <label id="lbl-type">포스팅 유형</label>
+      <select id="post-type" onchange="onTypeChange()">
+        <option value="info">정보 게시글 (Info Post)</option>
+        <option value="cartoon">저널 — 카툰 (Journal · Cartoon)</option>
+        <option value="note">저널 — 노트 (Journal · Note)</option>
+      </select>
+    </div>
+
+    <div class="form-group" id="cat-group">
+      <label id="lbl-cat">카테고리</label>
+      <select id="post-cat">
+        <option value="rehab">재활 (Rehab)</option>
+        <option value="med">의학/약물 (Medical)</option>
+        <option value="daily">일상보조 (Daily Aids)</option>
+        <option value="mental">심리/정서 (Mental Health)</option>
+        <option value="diet">식이요법 (Nutrition)</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label>제목 (한국어)</label>
+      <input type="text" id="post-title-ko" placeholder="한국어 제목">
+    </div>
+    <div class="form-group">
+      <label>Title (English)</label>
+      <input type="text" id="post-title-en" placeholder="English title">
+    </div>
+    <div class="form-group">
+      <label>내용 (한국어)</label>
+      <textarea id="post-body-ko" placeholder="내용을 입력하세요..."></textarea>
+    </div>
+    <div class="form-group">
+      <label>Body (English)</label>
+      <textarea id="post-body-en" placeholder="Enter content in English..."></textarea>
+    </div>
+
+    <!-- Image / Video Upload -->
+    <div class="form-group">
+      <label id="lbl-upload">이미지 / 동영상 업로드</label>
+      <div class="upload-zone" id="upload-zone"
+        ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" ondrop="handleDrop(event)"
+        onclick="document.getElementById('file-input').click()">
+        <input type="file" id="file-input" multiple accept="image/*,video/*" onchange="handleFiles(this.files)">
+        <div class="upload-zone-icon"><i class="ti ti-cloud-upload"></i></div>
+        <div class="upload-zone-text" id="lbl-upload-drop">클릭하거나 파일을 여기에 드래그하세요</div>
+        <div class="upload-zone-sub">이미지 (JPG·PNG·GIF·WebP) · 동영상 (MP4·WebM·MOV) — 최대 50MB</div>
+      </div>
+      <div class="upload-preview" id="upload-preview"></div>
+    </div>
+
+    <!-- Video / YouTube embed -->
+    <div class="form-group">
+      <label id="lbl-embed">YouTube / Vimeo / 동영상 링크 임베드</label>
+      <input type="url" id="embed-url" placeholder="https://www.youtube.com/watch?v=..." oninput="previewEmbed()">
+      <div class="embed-preview" id="embed-preview-wrap" style="display:none"></div>
+    </div>
+
+    <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:8px">
+      <button class="btn" onclick="closePostModal()" id="btn-cancel">취소</button>
+      <button class="btn btn-primary" onclick="submitPost()" id="btn-submit">게시하기</button>
+    </div>
+  </div>
+</div>
+
+<!-- GOAL MODAL -->
+<div class="modal-overlay" id="goal-modal">
+  <div class="modal" style="max-width:360px">
+    <div class="modal-header">
+      <div class="modal-title" id="goal-modal-title">목표 추가</div>
+      <button class="modal-close" onclick="closeGoalModal()"><i class="ti ti-x"></i></button>
+    </div>
+    <div class="form-group">
+      <label>목표 (한국어)</label>
+      <input type="text" id="goal-ko" placeholder="예: 매일 30분 보행 연습">
+    </div>
+    <div class="form-group">
+      <label>Goal (English)</label>
+      <input type="text" id="goal-en" placeholder="e.g. 30-min daily gait practice">
+    </div>
+    <div style="display:flex;gap:8px;justify-content:flex-end">
+      <button class="btn" onclick="closeGoalModal()">취소</button>
+      <button class="btn btn-primary" onclick="addGoal()">추가</button>
+    </div>
+  </div>
+</div>
+
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox" onclick="closeLightbox()">
+  <div class="lightbox-inner" id="lightbox-inner">
+    <button class="lightbox-close" onclick="closeLightbox()"><i class="ti ti-x"></i></button>
+  </div>
+</div>
+
+<script>
+/* ===================== DATA ===================== */
+const SEED_INFO = [
+  {id:'s1',type:'info',cat:'rehab',koTitle:'편마비 보행 훈련 단계별 가이드',enTitle:'Step-by-Step Gait Training for Hemiplegia',koBody:'평행봉 → 보조기구 → 독립보행까지의 단계별 목표와 주의사항을 정리했습니다.',enBody:'From parallel bars to assistive devices to independent walking — goals and cautions at each stage.',date:'2026-06-20',likes:0,media:[],embed:''},
+  {id:'s2',type:'info',cat:'med',koTitle:'항혈전제 복용 시 주의사항',enTitle:'Anticoagulant Medication Precautions',koBody:'와파린·NOACs 복용 시 식이제한 및 출혈 주의사항을 정리했습니다.',enBody:'Dietary restrictions and bleeding risks with warfarin and NOACs.',date:'2026-06-18',likes:0,media:[],embed:''},
+  {id:'s3',type:'info',cat:'daily',koTitle:'한손으로 요리하기 — 주방 보조도구 모음',enTitle:'One-Hand Cooking — Kitchen Aids Guide',koBody:'스파이크 보드, 무게감 있는 컵 등 유용한 보조도구를 소개합니다.',enBody:'Spike boards, weighted cups, and other helpful tools for one-handed cooking.',date:'2026-06-15',likes:0,media:[],embed:''},
+  {id:'s4',type:'info',cat:'mental',koTitle:'뇌졸중 후 우울감 — 정상 반응입니다',enTitle:'Post-Stroke Depression — It\'s Normal',koBody:'우울감의 원인, 자가 관리법, 전문가 도움 받는 시점에 대해 정리했습니다.',enBody:'Causes, self-care strategies, and when to seek professional help for post-stroke depression.',date:'2026-06-12',likes:0,media:[],embed:''},
+  {id:'s5',type:'info',cat:'diet',koTitle:'연하장애 환자를 위한 식단 구성',enTitle:'Meal Planning for Dysphagia',koBody:'점도 조절 음식, 안전 삼킴 자세, 영양 균형 유지법을 안내합니다.',enBody:'Thickened foods, safe swallowing positions, and maintaining nutritional balance.',date:'2026-06-10',likes:0,media:[],embed:''},
+];
+const SEED_JOURNAL = [
+  {id:'j1',type:'cartoon',koTitle:'"왼손 첫 단추"',enTitle:'"First Button with My Left Hand"',koBody:'아이한테도 지는 게 억울했는데, 오늘은 해냈다. 혼자서, 왼손으로, 단추 하나.',enBody:'Lost to a toddler for weeks. Today I did it. Alone, with my left hand, one button.',date:'2026-06-19',likes:0,media:[],embed:''},
+  {id:'j2',type:'note',koTitle:'물리치료 3개월 메모',enTitle:'3-Month PT Notes',koBody:'PT 선생님이 강조하신 핵심 3가지: 체중 이동, 코어 안정, 호흡 리듬.',enBody:'3 key points my PT kept emphasizing: weight shifting, core stability, breathing rhythm.',date:'2026-06-14',likes:0,media:[],embed:''},
+  {id:'j3',type:'cartoon',koTitle:'"휠체어 없이 첫 마트"',enTitle:'"First Grocery Run Without a Wheelchair"',koBody:'지팡이 하나로 마트를 다 돌았다. 다리가 후들거렸지만 이겼다.',enBody:'Made it through the whole store with just my cane. Legs were shaking, but I won.',date:'2026-06-07',likes:0,media:[],embed:''},
+];
+const SEED_GOALS = [
+  {ko:'매일 30분 보행 연습',en:'30-min daily gait practice',done:true},
+  {ko:'오전 어깨 운동 10회',en:'10 shoulder reps each morning',done:true},
+  {ko:'작업치료 과제 — 컵 들기',en:'OT task — cup lifting',done:false},
+  {ko:'명상 또는 심호흡 5분',en:'5-min meditation or breathing',done:false},
+];
+
+function load(key, fallback) {
+  try { const v = localStorage.getItem(key); return v ? JSON.parse(v) : fallback; } catch { return fallback; }
+}
+function save(key, val) { try { localStorage.setItem(key, JSON.stringify(val)); } catch { alert('저장 용량 초과. 일부 미디어를 삭제해주세요.'); } }
+
+let posts = load('hlh_posts', [...SEED_INFO, ...SEED_JOURNAL]);
+let goals = load('hlh_goals', SEED_GOALS);
+let rehabLog = load('hlh_rehab', {});
+let lang = 'ko';
+let infoFilter = 'all';
+let jFilter = 'all';
+let pendingMedia = []; // {dataUrl, mime, name}
+
+/* ===================== LANGUAGE ===================== */
+const T = {
+  ko: {
+    logoName:'편마비 라이프 허브', logoSub:'정보 · 회복 · 일상',
+    btnWrite:'새 포스팅', heroTitle:'뇌경색 편마비, 혼자가 아닙니다',
+    heroSub:'재활 정보·일상 팁·개인 경험을 한곳에 모았습니다. 한국어·영어로 제공됩니다.',
+    stat1:'정보 글', stat2:'저널 포스트',
+    homeRecentTitle:'최신 업데이트',
+    notice:'이 사이트의 정보는 의학적 조언을 대체하지 않습니다. 치료 결정은 반드시 담당 의료진과 상의하세요.',
+    noticeAuthor:'운영자 공지',
+    searchPh:'정보 검색...',
+    rehabWeekTitle:'이번 주 재활 기록', rehabGoalsTitle:'이번 주 목표', btnAddGoal:'목표 추가',
+    aboutTitle:'이 사이트에 대해',
+    aboutBody:'뇌경색으로 인한 편마비를 겪으며 수집한 정보와 개인적인 경험을 기록하는 공간입니다.<br><br>카툰과 노트 이미지로 일상을 솔직하게 담습니다. 완벽하지 않아도 괜찮습니다.',
+    swTags:'인기 태그', swStats:'사이트 현황', swLinks:'빠른 링크',
+    sl1:'정보 게시글', sl2:'저널 포스트', sl3:'최근 업데이트',
+    ql1:'응급상황 대처법', ql2:'재활병원 선택 가이드', ql3:'복지 혜택 신청',
+    modalTitle:'새 포스팅', lblType:'포스팅 유형', lblCat:'카테고리',
+    lblUpload:'이미지 / 동영상 업로드', lblUploadDrop:'클릭하거나 파일을 여기에 드래그하세요',
+    lblEmbed:'YouTube / Vimeo / 동영상 링크 임베드',
+    btnCancel:'취소', btnSubmit:'게시하기',
+    goalModalTitle:'목표 추가', btnAddGoalModal:'추가',
+    days:['일','월','화','수','목','금','토'],
+    catLabels:{rehab:'재활',med:'의학/약물',daily:'일상보조',mental:'심리/정서',diet:'식이요법'},
+    catBadge:{rehab:'badge-teal',med:'badge-blue',daily:'badge-amber',mental:'badge-purple',diet:'badge-green'},
+    done:'완료', inProgress:'진행중', today:'오늘',
+    noInfo:'게시글이 없습니다', noJournal:'저널 포스트가 없습니다',
+    cartoon:'카툰', note:'노트', deletePost:'삭제',
+  },
+  en: {
+    logoName:'Hemiplegia Life Hub', logoSub:'Info · Recovery · Daily Life',
+    btnWrite:'New Post', heroTitle:'Stroke Hemiplegia — You\'re Not Alone',
+    heroSub:'Rehab info, daily tips, and personal experiences — bilingual Korean/English.',
+    stat1:'Info Posts', stat2:'Journal Entries',
+    homeRecentTitle:'Latest Updates',
+    notice:'Information on this site does not replace medical advice. Always consult your healthcare provider for treatment decisions.',
+    noticeAuthor:'Admin Notice',
+    searchPh:'Search info...',
+    rehabWeekTitle:'This Week\'s Rehab Log', rehabGoalsTitle:'Weekly Goals', btnAddGoal:'Add Goal',
+    aboutTitle:'About This Site',
+    aboutBody:'A space to document information and personal experiences living with stroke-induced hemiplegia.<br><br>Daily life captured honestly through cartoons and note images. Imperfection is okay.',
+    swTags:'Popular Tags', swStats:'Site Stats', swLinks:'Quick Links',
+    sl1:'Info Posts', sl2:'Journal Entries', sl3:'Last Updated',
+    ql1:'Emergency Response', ql2:'Rehab Hospital Guide', ql3:'Welfare Benefits',
+    modalTitle:'New Post', lblType:'Post Type', lblCat:'Category',
+    lblUpload:'Image / Video Upload', lblUploadDrop:'Click or drag files here',
+    lblEmbed:'YouTube / Vimeo / Video Link Embed',
+    btnCancel:'Cancel', btnSubmit:'Publish',
+    goalModalTitle:'Add Goal', btnAddGoalModal:'Add',
+    days:['Sun','Mon','Tue','Wed','Thu','Fri','Sat'],
+    catLabels:{rehab:'Rehab',med:'Medical',daily:'Daily Aids',mental:'Mental Health',diet:'Nutrition'},
+    catBadge:{rehab:'badge-teal',med:'badge-blue',daily:'badge-amber',mental:'badge-purple',diet:'badge-green'},
+    done:'Done', inProgress:'In Progress', today:'Today',
+    noInfo:'No posts yet', noJournal:'No journal entries yet',
+    cartoon:'Cartoon', note:'Note', deletePost:'Delete',
+  }
+};
+
+function setLang(l) {
+  lang = l;
+  document.getElementById('btn-ko').classList.toggle('active', l==='ko');
+  document.getElementById('btn-en').classList.toggle('active', l==='en');
+  applyLang();
+  renderAll();
+}
+
+function applyLang() {
+  const L = T[lang];
+  const ids = {
+    'logo-name':'logoName','logo-sub':'logoSub','btn-write':'btnWrite',
+    'hero-title':'heroTitle','hero-sub':'heroSub',
+    'stat1-lbl':'stat1','stat2-lbl':'stat2',
+    'home-recent-title':'homeRecentTitle',
+    'notice-text':'notice','notice-author':'noticeAuthor',
+    'search-input_ph':'searchPh',
+    'rehab-week-title':'rehabWeekTitle','rehab-goals-title':'rehabGoalsTitle','btn-add-goal':'btnAddGoal',
+    'about-title':'aboutTitle',
+    'sw-tags':'swTags','sw-stats':'swStats','sw-links':'swLinks',
+    'sl1':'sl1','sl2':'sl2','sl3':'sl3',
+    'ql1':'ql1','ql2':'ql2','ql3':'ql3',
+    'modal-title':'modalTitle','lbl-type':'lblType','lbl-cat':'lblCat',
+    'lbl-upload':'lblUpload','lbl-upload-drop':'lblUploadDrop','lbl-embed':'lblEmbed',
+    'btn-cancel':'btnCancel','btn-submit':'btnSubmit',
+    'goal-modal-title':'goalModalTitle',
+  };
+  for (const [id, key] of Object.entries(ids)) {
+    const el = document.getElementById(id);
+    if (!el) continue;
+    if (id === 'about-body') el.innerHTML = L[key];
+    else if (id === 'search-input') el.placeholder = L[key];
+    else el.textContent = L[key];
+  }
+  document.getElementById('about-body').innerHTML = L.aboutBody;
+  document.getElementById('search-input').placeholder = L.searchPh;
+  document.querySelectorAll('.nav-item, .chip[data-ko]').forEach(el => {
+    const v = el.getAttribute('data-'+lang); if(v) el.textContent = v;
+  });
+}
+
+/* ===================== RENDER ===================== */
+function renderAll() { renderHome(); renderInfo(); renderJournal(); renderRehab(); updateSidebar(); }
+
+function infoPosts() { return posts.filter(p => p.type==='info'); }
+function journalPosts() { return posts.filter(p => p.type==='cartoon'||p.type==='note'); }
+
+function titleOf(p) { return lang==='ko' ? p.koTitle : p.enTitle; }
+function bodyOf(p) { return lang==='ko' ? p.koBody : p.enBody; }
+
+function catBadgeHtml(cat) {
+  const L = T[lang];
+  return `<span class="badge ${L.catBadge[cat]||'badge-gray'}">${L.catLabels[cat]||cat}</span>`;
+}
+
+function mediaHtml(p) {
+  if (!p.media || !p.media.length) return '';
+  const items = p.media.map((m,i) => {
+    if (m.mime && m.mime.startsWith('video/')) {
+      return `<div class="media-thumb" onclick="openLightbox(${JSON.stringify(p.id)},${i})">
+        <video src="${m.dataUrl}" muted preload="metadata"></video>
+        <div class="vid-icon"><i class="ti ti-player-play-filled"></i></div>
+      </div>`;
+    }
+    return `<div class="media-thumb" onclick="openLightbox(${JSON.stringify(p.id)},${i})">
+      <img src="${m.dataUrl}" alt="" loading="lazy">
+    </div>`;
+  });
+  return `<div class="media-grid">${items.join('')}</div>`;
+}
+
+function embedHtml(url) {
+  if (!url) return '';
+  const yt = ytId(url);
+  if (yt) return `<div class="embed-wrap"><iframe src="https://www.youtube.com/embed/${yt}" allowfullscreen title="YouTube"></iframe></div>`;
+  const vm = vmId(url);
+  if (vm) return `<div class="embed-wrap"><iframe src="https://player.vimeo.com/video/${vm}" allowfullscreen title="Vimeo"></iframe></div>`;
+  return `<div class="embed-wrap"><iframe src="${url}" allowfullscreen title="Embedded video"></iframe></div>`;
+}
+
+function postCard(p, showDelete=true) {
+  const L = T[lang];
+  const isJournal = p.type==='cartoon'||p.type==='note';
+  const typeBadge = isJournal
+    ? `<span class="badge ${p.type==='cartoon'?'badge-pink':'badge-gray'}">${p.type==='cartoon'?L.cartoon:L.note}</span>`
+    : catBadgeHtml(p.cat);
+  const del = showDelete ? `<button class="btn btn-danger" style="padding:4px 10px;font-size:11px" onclick="deletePost('${p.id}',event)">${L.deletePost}</button>` : '';
+  return `<div class="card" id="card-${p.id}">
+    ${typeBadge}
+    <div class="card-title">${titleOf(p)}</div>
+    <div class="card-desc">${bodyOf(p)}</div>
+    ${mediaHtml(p)}
+    ${embedHtml(p.embed)}
+    <div class="card-meta" style="margin-top:8px">
+      <i class="ti ti-calendar"></i><span>${p.date}</span>
+      ${del}
+    </div>
+  </div>`;
+}
+
+function renderHome() {
+  const all = [...posts].sort((a,b)=>b.date.localeCompare(a.date)).slice(0,4);
+  document.getElementById('home-recent-list').innerHTML = all.length ? all.map(p=>postCard(p,false)).join('') : `<div class="empty"><i class="ti ti-inbox"></i>${T[lang].noInfo}</div>`;
+  document.getElementById('stat-info-count').textContent = infoPosts().length;
+  document.getElementById('stat-journal-count').textContent = journalPosts().length;
+}
+
+function renderInfo() {
+  const q = document.getElementById('search-input').value.toLowerCase();
+  const list = infoPosts().filter(p => {
+    const matchCat = infoFilter==='all' || p.cat===infoFilter;
+    const matchQ = !q || titleOf(p).toLowerCase().includes(q) || bodyOf(p).toLowerCase().includes(q);
+    return matchCat && matchQ;
+  }).sort((a,b)=>b.date.localeCompare(a.date));
+  document.getElementById('info-list').innerHTML = list.length ? list.map(p=>postCard(p)).join('') : `<div class="empty"><i class="ti ti-search-off"></i>${T[lang].noInfo}</div>`;
+}
+
+function renderJournal() {
+  const list = journalPosts().filter(p => jFilter==='all' || p.type===jFilter).sort((a,b)=>b.date.localeCompare(a.date));
+  document.getElementById('journal-list').innerHTML = list.length ? list.map(p=>postCard(p)).join('') : `<div class="empty"><i class="ti ti-notebook"></i>${T[lang].noJournal}</div>`;
+}
+
+function renderRehab() {
+  const L = T[lang];
+  const now = new Date();
+  const day = now.getDay();
+  const monday = new Date(now); monday.setDate(now.getDate() - (day===0?6:day-1));
+  const grid = document.getElementById('rehab-grid');
+  grid.innerHTML = '';
+  for (let i=0;i<7;i++) {
+    const d = new Date(monday); d.setDate(monday.getDate()+i);
+    const key = d.toISOString().slice(0,10);
+    const isDone = !!rehabLog[key];
+    const isToday = key===now.toISOString().slice(0,10);
+    const div = document.createElement('div');
+    div.className = 'rehab-day';
+    div.innerHTML = `<div class="rehab-day-label">${L.days[d.getDay()]}</div>
+      <div class="rehab-day-box ${isDone?'done':''} ${isToday?'today':''}" onclick="toggleRehab('${key}',this)" title="${key}">
+        ${isDone ? '<i class="ti ti-check"></i>' : '<i class="ti ti-minus" style="opacity:0.3"></i>'}
+      </div>`;
+    grid.appendChild(div);
+  }
+  const goalList = document.getElementById('goal-list');
+  goalList.innerHTML = goals.length ? goals.map((g,i)=>`
+    <div class="goal-item">
+      <div class="goal-check ${g.done?'done':''}" onclick="toggleGoal(${i})">
+        ${g.done?'<i class="ti ti-check"></i>':''}
+      </div>
+      <span class="goal-text ${g.done?'done':''}">${lang==='ko'?g.ko:g.en}</span>
+      <span class="badge ${g.done?'badge-teal':'badge-amber'}">${g.done?L.done:L.inProgress}</span>
+      <button class="btn btn-danger" style="padding:3px 8px;font-size:11px" onclick="deleteGoal(${i})"><i class="ti ti-trash"></i></button>
+    </div>`).join('') : '<div style="padding:12px;color:var(--text-ter);font-size:13px">목표가 없습니다</div>';
+}
+
+function updateSidebar() {
+  const L = T[lang];
+  document.getElementById('sl1-val').textContent = infoPosts().length;
+  document.getElementById('sl2-val').textContent = journalPosts().length;
+  const latest = [...posts].sort((a,b)=>b.date.localeCompare(a.date))[0];
+  document.getElementById('sl3-val').textContent = latest ? (latest.date===new Date().toISOString().slice(0,10) ? L.today : latest.date) : '-';
+}
+
+/* ===================== ACTIONS ===================== */
+function showTab(tab) {
+  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+  document.getElementById('tab-'+tab).classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  document.getElementById('nav-'+tab).classList.add('active');
+  if (tab==='rehab') renderRehab();
+}
+
+function setInfoFilter(f, el) {
+  infoFilter = f;
+  document.querySelectorAll('#filter-row .chip').forEach(c=>c.classList.remove('active'));
+  el.classList.add('active');
+  renderInfo();
+}
+
+function setJFilter(f, el) {
+  jFilter = f;
+  document.querySelectorAll('#tab-journal .chip').forEach(c=>c.classList.remove('active'));
+  el.classList.add('active');
+  renderJournal();
+}
+
+function filterByTag(tag) {
+  document.getElementById('search-input').value = tag.replace('#','');
+  showTab('info');
+  renderInfo();
+}
+
+function deletePost(id, e) {
+  e.stopPropagation();
+  if (!confirm(lang==='ko'?'이 포스팅을 삭제하시겠습니까?':'Delete this post?')) return;
+  posts = posts.filter(p=>p.id!==id);
+  save('hlh_posts', posts);
+  renderAll();
+}
+
+function toggleRehab(key, el) {
+  rehabLog[key] = !rehabLog[key];
+  if (!rehabLog[key]) delete rehabLog[key];
+  save('hlh_rehab', rehabLog);
+  renderRehab();
+}
+
+function toggleGoal(i) {
+  goals[i].done = !goals[i].done;
+  save('hlh_goals', goals);
+  renderRehab();
+}
+
+function deleteGoal(i) {
+  goals.splice(i,1);
+  save('hlh_goals', goals);
+  renderRehab();
+}
+
+/* ===================== POST MODAL ===================== */
+function onTypeChange() {
+  const t = document.getElementById('post-type').value;
+  document.getElementById('cat-group').style.display = t==='info' ? '' : 'none';
+}
+
+function openPostModal() {
+  document.getElementById('post-modal').classList.add('open');
+  document.getElementById('post-title-ko').value='';
+  document.getElementById('post-title-en').value='';
+  document.getElementById('post-body-ko').value='';
+  document.getElementById('post-body-en').value='';
+  document.getElementById('embed-url').value='';
+  document.getElementById('embed-preview-wrap').style.display='none';
+  document.getElementById('upload-preview').innerHTML='';
+  pendingMedia = [];
+  onTypeChange();
+}
+
+function closePostModal() { document.getElementById('post-modal').classList.remove('open'); }
+
+function submitPost() {
+  const type = document.getElementById('post-type').value;
+  const koTitle = document.getElementById('post-title-ko').value.trim();
+  const enTitle = document.getElementById('post-title-en').value.trim();
+  const koBody = document.getElementById('post-body-ko').value.trim();
+  const enBody = document.getElementById('post-body-en').value.trim();
+  const embed = document.getElementById('embed-url').value.trim();
+  const cat = document.getElementById('post-cat').value;
+  if (!koTitle && !enTitle) { alert(lang==='ko'?'제목을 입력해주세요.':'Please enter a title.'); return; }
+  const post = {
+    id: 'p' + Date.now(),
+    type, cat,
+    koTitle: koTitle || enTitle,
+    enTitle: enTitle || koTitle,
+    koBody: koBody || enBody,
+    enBody: enBody || koBody,
+    date: new Date().toISOString().slice(0,10),
+    likes: 0,
+    media: pendingMedia.map(m=>({dataUrl:m.dataUrl, mime:m.mime, name:m.name})),
+    embed,
+  };
+  posts.unshift(post);
+  save('hlh_posts', posts);
+  closePostModal();
+  renderAll();
+  if (type==='info') showTab('info');
+  else showTab('journal');
+}
+
+/* ===================== GOAL MODAL ===================== */
+function openGoalModal() { document.getElementById('goal-modal').classList.add('open'); document.getElementById('goal-ko').value=''; document.getElementById('goal-en').value=''; }
+function closeGoalModal() { document.getElementById('goal-modal').classList.remove('open'); }
+function addGoal() {
+  const ko = document.getElementById('goal-ko').value.trim();
+  const en = document.getElementById('goal-en').value.trim();
+  if (!ko && !en) return;
+  goals.push({ko:ko||en, en:en||ko, done:false});
+  save('hlh_goals', goals);
+  closeGoalModal();
+  renderRehab();
+}
+
+/* ===================== FILE UPLOAD ===================== */
+function handleDragOver(e) { e.preventDefault(); document.getElementById('upload-zone').classList.add('drag'); }
+function handleDragLeave() { document.getElementById('upload-zone').classList.remove('drag'); }
+function handleDrop(e) { e.preventDefault(); document.getElementById('upload-zone').classList.remove('drag'); handleFiles(e.dataTransfer.files); }
+
+function handleFiles(files) {
+  const MAX = 50 * 1024 * 1024;
+  Array.from(files).forEach(file => {
+    if (file.size > MAX) { alert(file.name + ': 파일이 50MB를 초과합니다.'); return; }
+    if (!file.type.startsWith('image/') && !file.type.startsWith('video/')) return;
+    const reader = new FileReader();
+    reader.onload = e => {
+      const m = {dataUrl: e.target.result, mime: file.type, name: file.name};
+      pendingMedia.push(m);
+      addPreviewItem(m, pendingMedia.length-1);
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
+function addPreviewItem(m, idx) {
+  const wrap = document.createElement('div');
+  wrap.className = 'upload-preview-item';
+  wrap.id = 'prev-'+idx;
+  if (m.mime.startsWith('video/')) {
+    wrap.innerHTML = `<video src="${m.dataUrl}" muted></video><div class="vid-icon" style="font-size:16px"><i class="ti ti-player-play-filled"></i></div>`;
+  } else {
+    wrap.innerHTML = `<img src="${m.dataUrl}" alt="${m.name}">`;
+  }
+  const btn = document.createElement('button');
+  btn.className = 'upload-preview-remove';
+  btn.innerHTML = '<i class="ti ti-x"></i>';
+  btn.onclick = () => { pendingMedia.splice(idx,1); wrap.remove(); };
+  wrap.appendChild(btn);
+  document.getElementById('upload-preview').appendChild(wrap);
+}
+
+/* ===================== EMBED PREVIEW ===================== */
+function ytId(url) {
+  try {
+    const u = new URL(url);
+    if (u.hostname.includes('youtu.be')) return u.pathname.slice(1);
+    if (u.hostname.includes('youtube.com')) return u.searchParams.get('v');
+  } catch {}
+  return null;
+}
+function vmId(url) {
+  try { const m = url.match(/vimeo\.com\/(\d+)/); return m ? m[1] : null; } catch { return null; }
+}
+
+function previewEmbed() {
+  const url = document.getElementById('embed-url').value.trim();
+  const wrap = document.getElementById('embed-preview-wrap');
+  if (!url) { wrap.style.display='none'; wrap.innerHTML=''; return; }
+  const yt = ytId(url);
+  if (yt) {
+    wrap.style.display='';
+    wrap.innerHTML = `<iframe src="https://www.youtube.com/embed/${yt}" allowfullscreen title="YouTube preview"></iframe>`;
+    return;
+  }
+  const vm = vmId(url);
+  if (vm) {
+    wrap.style.display='';
+    wrap.innerHTML = `<iframe src="https://player.vimeo.com/video/${vm}" allowfullscreen title="Vimeo preview"></iframe>`;
+    return;
+  }
+  wrap.style.display='';
+  wrap.innerHTML = `<div class="embed-placeholder"><i class="ti ti-link" style="font-size:20px;display:block;margin-bottom:6px"></i>게시 후 임베드됩니다<br><small>${url}</small></div>`;
+}
+
+/* ===================== LIGHTBOX ===================== */
+function openLightbox(postId, idx) {
+  const p = posts.find(x=>x.id===postId);
+  if (!p || !p.media[idx]) return;
+  const m = p.media[idx];
+  const inner = document.getElementById('lightbox-inner');
+  if (m.mime.startsWith('video/')) {
+    inner.innerHTML = `<button class="lightbox-close" onclick="closeLightbox()"><i class="ti ti-x"></i></button><video src="${m.dataUrl}" controls autoplay style="max-width:90vw;max-height:85vh;border-radius:8px"></video>`;
+  } else {
+    inner.innerHTML = `<button class="lightbox-close" onclick="closeLightbox()"><i class="ti ti-x"></i></button><img src="${m.dataUrl}" alt="" style="max-width:90vw;max-height:85vh;border-radius:8px">`;
+  }
+  document.getElementById('lightbox').classList.add('open');
+}
+function closeLightbox() { document.getElementById('lightbox').classList.remove('open'); document.getElementById('lightbox-inner').innerHTML=''; }
+
+/* ===================== KEYBOARD ===================== */
+document.addEventListener('keydown', e => { if (e.key==='Escape') { closePostModal(); closeGoalModal(); closeLightbox(); } });
+
+/* ===================== INIT ===================== */
+applyLang();
+renderAll();
+</script>
+</body>
+</html>
