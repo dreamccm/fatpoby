@@ -2066,12 +2066,13 @@ async function doLoginKakao(){
   });
 }
 
-/* ── Naver (implicit grant popup) ── */
-function doLoginNaver(){
-  if(!hasOAuthKey('naver')){ showNickModal('naver'); return; }
-  const state='naver__'+Math.random().toString(36).slice(2);
-  const url=`https://nid.naver.com/oauth2.0/authorize?response_type=token&client_id=${OAUTH.naver.clientId}&redirect_uri=${encodeURIComponent(OAUTH_REDIRECT)}&state=${state}`;
-  openOAuthPopup(url);
+/* ── Naver (Supabase OAuth redirect) ── */
+async function doLoginNaver(){
+  if(!sb){ showNickModal('naver'); return; }
+  await sb.auth.signInWithOAuth({
+    provider:'naver',
+    options:{ redirectTo: window.location.href }
+  });
 }
 
 /* ── Discord (implicit grant popup) ── */
