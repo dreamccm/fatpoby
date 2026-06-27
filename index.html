@@ -2045,35 +2045,13 @@ function openOAuthPopup(url){
   window.open(url,'hlh_oauth',`width=${w},height=${h},left=${l},top=${t},menubar=no,toolbar=no`);
 }
 
-/* ── Google ── */
+/* ── Google (Supabase OAuth redirect) ── */
 async function doLoginGoogle(){
-  if(!hasOAuthKey('google')){ showNickModal('google'); return; }
-  await loadScript('https://accounts.google.com/gsi/client');
-  document.getElementById('g-signin-wrap')?.remove();
-  const wrap=document.createElement('div');
-  wrap.id='g-signin-wrap';
-  wrap.style.cssText='position:fixed;inset:0;z-index:9000;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.55)';
-  wrap.innerHTML=`<div style="background:var(--bg);border-radius:var(--rx);padding:26px;min-width:280px;text-align:center;box-shadow:0 8px 40px rgba(0,0,0,.3)">
-    <div style="font-size:15px;font-weight:800;margin-bottom:16px">${lang==='ko'?'Google 계정으로 로그인':'Sign in with Google'}</div>
-    <div id="g-btn-target" style="display:flex;justify-content:center"></div>
-    <button onclick="document.getElementById('g-signin-wrap').remove()" style="margin-top:14px;font-size:12px;color:var(--text3);border:none;background:none;cursor:pointer;font-family:inherit">${lang==='ko'?'취소':'Cancel'}</button>
-  </div>`;
-  document.body.appendChild(wrap);
-  google.accounts.id.initialize({
-    client_id: OAUTH.google.clientId,
-    callback: (resp)=>{
-      try{
-        const p=JSON.parse(atob(resp.credential.split('.')[1]));
-        completeSocialLogin('google', p.name||p.email, p.sub);
-        document.getElementById('g-signin-wrap')?.remove();
-      }catch{ showNickModal('google'); }
-    },
-    cancel_on_tap_outside: false,
+  if(!sb){ showNickModal('google'); return; }
+  await sb.auth.signInWithOAuth({
+    provider:'google',
+    options:{ redirectTo: window.location.href }
   });
-  google.accounts.id.renderButton(document.getElementById('g-btn-target'),{
-    theme:'outline', size:'large', text:'signin_with', locale: lang==='ko'?'ko':'en',
-  });
-  google.accounts.id.prompt();
 }
 
 /* ── Kakao (Supabase OAuth redirect) ── */
