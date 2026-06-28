@@ -825,8 +825,7 @@ async function loadPostsFromDB(){
     return;
   }
   if(data.length===0){
-    /* DB 비어있으면 시드 데이터 삽입 */
-    await seedPostsToDB();
+    posts=[];
   } else {
     posts=data.map(dbToPost);
     _dbReady=true;
