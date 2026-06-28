@@ -258,13 +258,14 @@ select{appearance:none;cursor:pointer;}
 .empty i{font-size:30px;display:block;margin-bottom:9px;}
 
 /* Social login buttons */
-.social-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:10px;}
+.social-grid{display:grid;grid-template-columns:1fr;gap:7px;margin-top:10px;}
 .social-btn{display:flex;align-items:center;gap:8px;padding:9px 13px;border-radius:var(--r);border:1px solid transparent;font-size:13px;cursor:pointer;font-family:inherit;transition:opacity .15s;width:100%;justify-content:center;font-weight:600;}
 .social-btn:hover{opacity:.82;}
 .social-kakao{background:#FEE500;color:#3A2929;}
 .social-naver{background:#03C75A;color:#fff;}
 .social-google{background:#fff;border-color:#ddd;color:#333;}
-.social-discord{background:#5865F2;color:#fff;}
+.social-github{background:#24292e;color:#fff;}
+.social-facebook{background:#1877F2;color:#fff;}
 
 /* Comments */
 .comment-section{margin-top:22px;padding-top:18px;border-top:2px solid var(--bd);}
@@ -700,7 +701,8 @@ select{appearance:none;cursor:pointer;}
     <p style="font-size:13px;color:var(--text2);margin-bottom:6px" id="social-modal-sub">댓글을 남기려면 소셜 계정으로 로그인하세요.</p>
     <div class="social-grid">
       <button class="social-btn social-google" onclick="initSocialLogin('google')"><i class="ti ti-brand-google"></i> Google</button>
-      <button class="social-btn social-discord" onclick="initSocialLogin('discord')"><i class="ti ti-brand-discord"></i> Discord</button>
+      <button class="social-btn social-facebook" onclick="initSocialLogin('facebook')"><i class="ti ti-brand-facebook"></i> Facebook</button>
+      <button class="social-btn social-github" onclick="initSocialLogin('github')"><i class="ti ti-brand-github"></i> GitHub</button>
     </div>
   </div>
 </div>
@@ -2065,11 +2067,20 @@ async function doLoginKakao(){
   });
 }
 
-/* ── Naver (Supabase OAuth redirect) ── */
-async function doLoginNaver(){
-  if(!sb){ showNickModal('naver'); return; }
+/* ── GitHub (Supabase OAuth redirect) ── */
+async function doLoginGithub(){
+  if(!sb){ showNickModal('github'); return; }
   await sb.auth.signInWithOAuth({
-    provider:'naver',
+    provider:'github',
+    options:{ redirectTo: window.location.href }
+  });
+}
+
+/* ── Facebook (Supabase OAuth redirect) ── */
+async function doLoginFacebook(){
+  if(!sb){ showNickModal('facebook'); return; }
+  await sb.auth.signInWithOAuth({
+    provider:'facebook',
     options:{ redirectTo: window.location.href }
   });
 }
@@ -2122,8 +2133,7 @@ function showNickModal(provider){
 
 function initSocialLogin(provider){
   closeSocialModal();
-  ({google:doLoginGoogle,kakao:doLoginKakao,naver:doLoginNaver,
-    discord:doLoginDiscord})[provider]?.();
+  ({google:doLoginGoogle,github:doLoginGithub,facebook:doLoginFacebook})[provider]?.();
 }
 
 function confirmSocialLogin(){
@@ -2196,7 +2206,8 @@ function renderCommentSection(postId){
       <div class="comment-login-lbl">${L.commentLoginLbl}</div>
       <div class="social-grid">
         <button class="social-btn social-google" onclick="initSocialLogin('google')"><i class="ti ti-brand-google"></i> Google</button>
-        <button class="social-btn social-discord" onclick="initSocialLogin('discord')"><i class="ti ti-brand-discord"></i> Discord</button>
+        <button class="social-btn social-facebook" onclick="initSocialLogin('facebook')"><i class="ti ti-brand-facebook"></i> Facebook</button>
+        <button class="social-btn social-github" onclick="initSocialLogin('github')"><i class="ti ti-brand-github"></i> GitHub</button>
       </div>
     </div>`;
   }
