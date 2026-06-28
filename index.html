@@ -266,6 +266,7 @@ select{appearance:none;cursor:pointer;}
 .social-google{background:#fff;border-color:#ddd;color:#333;}
 .social-github{background:#24292e;color:#fff;}
 .social-facebook{background:#1877F2;color:#fff;}
+.social-linkedin{background:#0A66C2;color:#fff;}
 
 /* Comments */
 .comment-section{margin-top:22px;padding-top:18px;border-top:2px solid var(--bd);}
@@ -702,6 +703,7 @@ select{appearance:none;cursor:pointer;}
     <div class="social-grid">
       <button class="social-btn social-google" onclick="initSocialLogin('google')"><i class="ti ti-brand-google"></i> Google</button>
       <button class="social-btn social-github" onclick="initSocialLogin('github')"><i class="ti ti-brand-github"></i> GitHub</button>
+      <button class="social-btn social-linkedin" onclick="initSocialLogin('linkedin')"><i class="ti ti-brand-linkedin"></i> LinkedIn</button>
     </div>
   </div>
 </div>
@@ -2066,6 +2068,15 @@ async function doLoginKakao(){
   });
 }
 
+/* ── LinkedIn (Supabase OAuth redirect) ── */
+async function doLoginLinkedin(){
+  if(!sb){ showNickModal('linkedin'); return; }
+  await sb.auth.signInWithOAuth({
+    provider:'linkedin_oidc',
+    options:{ redirectTo: window.location.href }
+  });
+}
+
 /* ── GitHub (Supabase OAuth redirect) ── */
 async function doLoginGithub(){
   if(!sb){ showNickModal('github'); return; }
@@ -2132,7 +2143,7 @@ function showNickModal(provider){
 
 function initSocialLogin(provider){
   closeSocialModal();
-  ({google:doLoginGoogle,github:doLoginGithub,facebook:doLoginFacebook})[provider]?.();
+  ({google:doLoginGoogle,github:doLoginGithub,facebook:doLoginFacebook,linkedin:doLoginLinkedin})[provider]?.();
 }
 
 function confirmSocialLogin(){
@@ -2206,6 +2217,7 @@ function renderCommentSection(postId){
       <div class="social-grid">
         <button class="social-btn social-google" onclick="initSocialLogin('google')"><i class="ti ti-brand-google"></i> Google</button>
         <button class="social-btn social-github" onclick="initSocialLogin('github')"><i class="ti ti-brand-github"></i> GitHub</button>
+        <button class="social-btn social-linkedin" onclick="initSocialLogin('linkedin')"><i class="ti ti-brand-linkedin"></i> LinkedIn</button>
       </div>
     </div>`;
   }
