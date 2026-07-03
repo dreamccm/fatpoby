@@ -3,10 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>A. Lefty Lab — 뇌경색 편마비 정보·회복·일상</title>
-<meta name="description" content="뇌경색 편마비를 겪으며 수집한 재활 정보, 일상 팁, 개인 경험을 기록하는 공간입니다. Stroke hemiplegia information, recovery, and daily life.">
-<meta property="og:title" content="A. Lefty Lab">
-<meta property="og:description" content="뇌경색 편마비 정보·회복·일상 — Stroke Hemiplegia Info & Journal">
+<title>그림판 — 자유롭게 그린 나의 그림, 설정 모음</title>
+<meta name="description" content="자유롭게 그린 나의 그림과 설정을 모아두는 공간입니다. Draw freely in the browser and collect your pictures.">
+<meta property="og:title" content="그림판">
+<meta property="og:description" content="자유롭게 그린 나의 그림, 설정 모음 — My Paint & Gallery">
 <meta property="og:type" content="website">
 <meta property="og:locale" content="ko_KR">
 <meta name="robots" content="index, follow">
@@ -16,8 +16,8 @@
 {
   "@context":"https://schema.org",
   "@type":"WebSite",
-  "name":"A. Lefty Lab",
-  "description":"뇌경색 편마비 정보·회복·일상 기록 — Stroke hemiplegia information, recovery, and daily life journal",
+  "name":"그림판",
+  "description":"자유롭게 그린 나의 그림, 설정 모음 — A place to draw freely and collect my pictures and settings",
   "inLanguage":["ko","en"]
 }
 </script>
@@ -298,6 +298,18 @@ select{appearance:none;cursor:pointer;}
 .btn-pin{padding:3px 7px;font-size:11px;border-radius:var(--r);border:1px solid var(--bd2);background:transparent;color:var(--text3);cursor:pointer;font-family:inherit;transition:all .15s;}
 .btn-pin.pinned{border-color:var(--amber);color:var(--amber);background:var(--amber-l);}
 .btn-pin:hover{border-color:var(--amber);color:var(--amber);}
+
+/* 그림판 */
+.draw-toolbar{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-bottom:12px;padding:10px;background:var(--bg2);border:1px solid var(--bd);border-radius:var(--rl);}
+.draw-toolbar-sep{flex:0 0 1px;height:22px;background:var(--bd2);margin:0 2px;}
+.draw-width-lbl{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--text2);}
+.draw-width-lbl input[type=range]{width:90px;}
+#draw-color{width:32px;height:28px;padding:0;border:1px solid var(--bd2);border-radius:var(--r);background:none;cursor:pointer;}
+#draw-palette{display:inline-flex;gap:4px;align-items:center;}
+.draw-swatch{width:18px;height:18px;border-radius:50%;border:1px solid var(--bd2);cursor:pointer;padding:0;transition:transform .1s;}
+.draw-swatch:hover{transform:scale(1.2);}
+.draw-canvas-wrap{border:1px solid var(--bd2);border-radius:var(--rl);overflow:hidden;background:#fff;box-shadow:var(--sh);}
+#draw-canvas{display:block;width:100%;touch-action:none;cursor:crosshair;}
 </style>
 </head>
 <body>
@@ -306,10 +318,10 @@ select{appearance:none;cursor:pointer;}
 <!-- TOPBAR -->
 <header class="topbar">
   <a class="logo" href="#" onclick="showTab('home');return false;">
-    <div class="logo-icon"><i class="ti ti-heart-handshake"></i></div>
+    <div class="logo-icon"><i class="ti ti-brush"></i></div>
     <div>
-      <div class="logo-name" id="logo-name">A. Lefty Lab</div>
-      <div class="logo-sub" id="logo-sub">정보 · 회복 · 일상</div>
+      <div class="logo-name" id="logo-name">그림판</div>
+      <div class="logo-sub" id="logo-sub">그림 · 갤러리 · 기록</div>
     </div>
   </a>
   <div class="gs-wrap" id="gs-wrap">
@@ -336,8 +348,8 @@ select{appearance:none;cursor:pointer;}
 <!-- NAV -->
 <nav class="nav" id="main-nav">
   <div class="nav-item on" id="nav-home" onclick="showTab('home')" data-tab="home">홈</div>
-  <div class="nav-item" id="nav-info" onclick="showTab('info')" data-tab="info">정보</div>
-  <div class="nav-item" id="nav-journal" onclick="showTab('journal')" data-tab="journal">저널</div>
+  <div class="nav-item" id="nav-draw" onclick="showTab('draw')" data-tab="draw">그림판</div>
+  <div class="nav-item" id="nav-info" onclick="showTab('info')" data-tab="info">게시판</div>
   <div class="nav-item" id="nav-admin" onclick="showTab('admin')" data-tab="admin" style="display:none">관리자</div>
   <div class="nav-item" id="nav-about" onclick="showTab('about')" data-tab="about">소개</div>
 </nav>
@@ -349,17 +361,16 @@ select{appearance:none;cursor:pointer;}
   <!-- HOME -->
   <div class="tab-panel on" id="tab-home">
     <div class="hero">
-      <div class="hero-title" id="hero-title">뇌경색 편마비, 혼자가 아닙니다</div>
-      <div class="hero-sub" id="hero-sub">재활 정보·일상 팁·개인 경험을 한곳에 모았습니다.</div>
+      <div class="hero-title" id="hero-title">자유롭게 그리는 나만의 그림판</div>
+      <div class="hero-sub" id="hero-sub">브라우저에서 그림을 그리고, 게시판에 모아보세요.</div>
       <div class="hero-stats">
-        <div><div class="hero-stat-num" id="cnt-info">0</div><div class="hero-stat-lbl" id="s1lbl">정보 글</div></div>
-        <div><div class="hero-stat-num" id="cnt-journal">0</div><div class="hero-stat-lbl" id="s2lbl">저널 포스트</div></div>
+        <div><div class="hero-stat-num" id="cnt-info">0</div><div class="hero-stat-lbl" id="s1lbl">게시글</div></div>
       </div>
     </div>
     <div class="sec-hd"><div class="sec-title" id="home-rec-title">최신 업데이트</div></div>
     <div id="home-list"></div>
     <div class="notice">
-      <span id="notice-txt">이 사이트의 정보는 의학적 조언을 대체하지 않습니다. 치료 결정은 반드시 담당 의료진과 상의하세요.</span>
+      <span id="notice-txt">이 사이트는 자유롭게 그린 그림과 설정을 모아두는 개인 공간입니다. 즐겁게 구경해 주세요.</span>
       <div class="notice-date" id="notice-by">운영자 공지</div>
     </div>
   </div>
@@ -368,26 +379,32 @@ select{appearance:none;cursor:pointer;}
   <div class="tab-panel" id="tab-info">
     <div class="tab-search">
       <i class="ti ti-search" style="color:var(--text3);font-size:15px"></i>
-      <input id="info-search" placeholder="정보 검색..." oninput="renderInfo()">
+      <input id="info-search" placeholder="게시판 검색..." oninput="renderInfo()">
     </div>
     <div class="filter-row" id="info-filters"></div>
     <div id="info-list"></div>
     <div class="pagination" id="info-pagination" style="display:none"></div>
   </div>
 
-  <!-- JOURNAL -->
-  <div class="tab-panel" id="tab-journal">
-    <div class="tab-search">
-      <i class="ti ti-search" style="color:var(--text3);font-size:15px"></i>
-      <input id="journal-search" placeholder="저널 검색..." oninput="renderJournal()">
+  <!-- DRAW (그림판) -->
+  <div class="tab-panel" id="tab-draw">
+    <div class="sec-hd"><div class="sec-title" data-ko="그림판" data-en="Paint">그림판</div></div>
+    <div class="draw-toolbar">
+      <button class="chip on" id="draw-tool-pen" onclick="setDrawTool('pen')"><i class="ti ti-pencil"></i> <span data-ko="펜" data-en="Pen">펜</span></button>
+      <button class="chip" id="draw-tool-eraser" onclick="setDrawTool('eraser')"><i class="ti ti-eraser"></i> <span data-ko="지우개" data-en="Eraser">지우개</span></button>
+      <input type="color" id="draw-color" value="#1a1a1a" oninput="setDrawColor(this.value)" title="색상">
+      <span id="draw-palette"></span>
+      <label class="draw-width-lbl"><span data-ko="굵기" data-en="Size">굵기</span>
+        <input type="range" id="draw-width" min="1" max="40" value="4" oninput="drawWidth=+this.value">
+      </label>
+      <span class="draw-toolbar-sep"></span>
+      <button class="btn btn-sm" id="draw-undo-btn" onclick="drawUndo()" title="실행취소"><i class="ti ti-arrow-back-up"></i></button>
+      <button class="btn btn-sm" id="draw-redo-btn" onclick="drawRedo()" title="다시실행"><i class="ti ti-arrow-forward-up"></i></button>
+      <button class="btn btn-sm" onclick="drawClear()"><i class="ti ti-trash"></i> <span data-ko="지우기" data-en="Clear">지우기</span></button>
+      <button class="btn btn-sm" onclick="drawSavePng()"><i class="ti ti-download"></i> <span data-ko="PNG 저장" data-en="Save PNG">PNG 저장</span></button>
+      <button class="btn btn-sm btn-primary" onclick="drawToBoard()"><i class="ti ti-upload"></i> <span data-ko="게시판에 올리기" data-en="Post to Board">게시판에 올리기</span></button>
     </div>
-    <div class="filter-row">
-      <button class="chip on" onclick="setJFilter('all',this)" data-ko="전체" data-en="All">전체</button>
-      <button class="chip" onclick="setJFilter('cartoon',this)" data-ko="카툰" data-en="Cartoon">카툰</button>
-      <button class="chip" onclick="setJFilter('note',this)" data-ko="노트" data-en="Note">노트</button>
-    </div>
-    <div id="journal-list"></div>
-    <div class="pagination" id="journal-pagination" style="display:none"></div>
+    <div class="draw-canvas-wrap"><canvas id="draw-canvas"></canvas></div>
   </div>
 
   <!-- ADMIN -->
@@ -395,8 +412,7 @@ select{appearance:none;cursor:pointer;}
     <div class="admin-panel">
       <div class="admin-panel-title"><i class="ti ti-shield"></i><span id="admin-panel-title">관리자 대시보드</span></div>
       <div class="admin-stat-grid">
-        <div class="admin-stat"><div class="admin-stat-num" id="adm-cnt-info">0</div><div class="admin-stat-lbl" id="adm-lbl1">정보 글</div></div>
-        <div class="admin-stat"><div class="admin-stat-num" id="adm-cnt-journal">0</div><div class="admin-stat-lbl" id="adm-lbl2">저널</div></div>
+        <div class="admin-stat"><div class="admin-stat-num" id="adm-cnt-info">0</div><div class="admin-stat-lbl" id="adm-lbl1">게시글</div></div>
         <div class="admin-stat"><div class="admin-stat-num" id="adm-cnt-all">0</div><div class="admin-stat-lbl" id="adm-lbl3">전체</div></div>
       </div>
       <button class="btn btn-primary" style="width:100%;justify-content:center;margin-bottom:8px" onclick="openWriteModal()">
@@ -416,7 +432,7 @@ select{appearance:none;cursor:pointer;}
     <!-- 카테고리 관리 -->
     <div class="admin-section">
       <div class="admin-section-title">
-        <span id="adm-cat-title">카테고리 관리 (정보)</span>
+        <span id="adm-cat-title">카테고리 관리 (게시판)</span>
         <button class="btn btn-sm btn-primary" onclick="openCatModal()"><i class="ti ti-plus"></i> <span id="adm-cat-add">새 카테고리</span></button>
       </div>
       <div id="adm-cat-list"></div>
@@ -461,7 +477,7 @@ select{appearance:none;cursor:pointer;}
     <p class="about-body" id="about-body"></p>
     <hr class="divider">
     <div style="font-size:12px;color:var(--text3)">
-      <strong style="color:var(--text2)">기술:</strong> 순수 HTML/CSS/JS · localStorage · FileReader API · YouTube/Vimeo 임베드 · MyMemory 자동 번역
+      <strong style="color:var(--text2)">기술:</strong> 순수 HTML/CSS/JS · Canvas API · Supabase · localStorage · MyMemory 자동 번역
     </div>
   </div>
 
@@ -474,13 +490,11 @@ select{appearance:none;cursor:pointer;}
 <aside class="sidebar">
   <div class="sw">
     <div class="sw-title" id="sw-stats">사이트 현황</div>
-    <div class="stat-row"><span class="stat-lbl" id="sl1">정보 게시글</span><span class="stat-val" id="sl1v">0</span></div>
-    <div class="stat-row"><span class="stat-lbl" id="sl2">저널 포스트</span><span class="stat-val" id="sl2v">0</span></div>
+    <div class="stat-row"><span class="stat-lbl" id="sl1">게시글</span><span class="stat-val" id="sl1v">0</span></div>
     <div class="stat-row"><span class="stat-lbl" id="sl3">최근 업데이트</span><span class="stat-val" id="sl3v">-</span></div>
   </div>
   <div class="sw">
     <div class="sw-title" id="sw-links">빠른 링크</div>
-    <a class="ql" href="https://www.youtube.com/@aleftylab" target="_blank" rel="noopener" style="text-decoration:none;color:inherit"><i class="ti ti-brand-youtube"></i><span>YouTube @aleftylab</span></a>
   </div>
 </aside>
 </div><!-- /main -->
@@ -529,14 +543,6 @@ select{appearance:none;cursor:pointer;}
       <button class="modal-close" onclick="closeWriteModal()"><i class="ti ti-x"></i></button>
     </div>
     <input type="hidden" id="editing-post-id">
-    <div class="form-group">
-      <label id="lbl-type">포스팅 유형</label>
-      <select id="post-type" onchange="onTypeChange()">
-        <option value="info">정보 게시글 (Info Post)</option>
-        <option value="cartoon">저널 — 카툰 (Cartoon)</option>
-        <option value="note">저널 — 노트 (Note)</option>
-      </select>
-    </div>
     <div class="form-group" id="cat-group">
       <div class="lbl-with-btn">
         <label id="lbl-cat">카테고리</label>
@@ -686,7 +692,7 @@ select{appearance:none;cursor:pointer;}
     <hr class="divider">
     <div style="font-size:13px;font-weight:700;margin-bottom:8px" id="cat-add-title">새 카테고리 추가</div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px">
-      <div><label style="font-size:11px">한국어</label><input type="text" id="cat-new-ko" placeholder="재활"></div>
+      <div><label style="font-size:11px">한국어</label><input type="text" id="cat-new-ko" placeholder="자유그림"></div>
       <div><label style="font-size:11px">English</label><input type="text" id="cat-new-en" placeholder="Rehab"></div>
     </div>
     <div style="margin-bottom:10px">
@@ -840,8 +846,9 @@ async function loadPostsFromDB(){
     return;
   }
   _dbReady=true;
-  posts=data.filter(r=>!r.is_deleted).map(dbToPost);
-  trashedPosts=data.filter(r=>r.is_deleted).map(dbToPost);
+  /* 리브랜딩 이전의 저널(cartoon/note) 행은 화면에서 제외 — DB에는 그대로 보존 */
+  posts=data.filter(r=>!r.is_deleted&&r.type==='info').map(dbToPost);
+  trashedPosts=data.filter(r=>r.is_deleted&&r.type==='info').map(dbToPost);
 }
 
 async function seedPostsToDB(){
@@ -868,6 +875,15 @@ async function loadCatsFromDB(){
     const rows=DEFAULT_CATS.map((c,i)=>({...c,display_order:i}));
     const {data:ins}=await sb.from('categories').upsert(rows,{onConflict:'id'}).select();
     if(ins?.length) cats=ins.map(r=>({id:r.id,ko:r.ko,en:r.en,badge:r.badge}));
+    return;
+  }
+  /* 리브랜딩 1회 마이그레이션: 옛 테마 카테고리가 남아 있으면 새 기본값으로 교체 */
+  const OLD_CAT_IDS=['rehab','med','mental','diet'];
+  if(data.some(r=>OLD_CAT_IDS.includes(r.id))){
+    for(const r of data) await deleteCatFromDB(r.id);
+    const rows=DEFAULT_CATS.map((c,i)=>({...c,display_order:i}));
+    await sb.from('categories').upsert(rows,{onConflict:'id'});
+    cats=[...DEFAULT_CATS];
     return;
   }
   cats=data.map(r=>({id:r.id,ko:r.ko,en:r.en,badge:r.badge}));
@@ -945,79 +961,54 @@ async function togglePinInDB(id, pinned){
 }
 
 const SEED_POSTS=[
-  {id:'s1',type:'info',cat:'rehab',
-   koTitle:'편마비 보행 훈련 단계별 가이드',enTitle:'Step-by-Step Gait Training for Hemiplegia',
-   koBody:'평행봉 → 보조기구 → 독립보행까지의 단계별 목표와 주의사항을 정리했습니다.\n\n■ 1단계: 평행봉\n양손으로 지지하며 체중 이동 연습. 목표: 10분 연속 보행.\n\n■ 2단계: 보조기구(지팡이·워커)\n편측 지지 보행 익히기. 보행 패턴 형성이 핵심.\n\n■ 3단계: 독립 보행\n평지 → 경사로 → 계단 순으로 확장. 낙상 예방에 주의.',
-   enBody:'Roadmap from parallel bars to assistive devices to independent walking.\n\n■ Stage 1: Parallel Bars\nWeight shifting with bilateral support. Goal: 10 minutes continuous.\n\n■ Stage 2: Assistive Devices\nMastering unilateral support gait. Focus on establishing gait pattern.\n\n■ Stage 3: Independent Walking\nProgress: flat → ramp → stairs. Prioritize fall prevention.',
+  {id:'s1',type:'info',cat:'free',
+   koTitle:'첫 그림 — 자유 낙서',enTitle:'First Drawing — Free Doodle',
+   koBody:'그림판 탭에서 자유롭게 그린 첫 낙서입니다.\n\n펜 굵기와 색을 바꿔가며 마음 가는 대로 그려보세요. 완성한 그림은 PNG로 저장하거나 게시판에 올릴 수 있습니다.',
+   enBody:'My first doodle drawn freely in the Paint tab.\n\nChange the pen size and color and draw whatever comes to mind. Finished drawings can be saved as PNG or posted to the board.',
    date:'2026-06-20',media:[],embed:''},
-  {id:'s2',type:'info',cat:'med',
-   koTitle:'항혈전제 복용 시 주의사항',enTitle:'Anticoagulant Medication Precautions',
-   koBody:'와파린·NOACs 복용 시 주요 주의사항입니다.\n\n• 와파린: 녹황색 채소(비타민K) 섭취량을 일정하게 유지하세요.\n• NOACs: 복용 시간을 매일 일정하게 지키는 것이 중요합니다.\n• 출혈 징후(잇몸 출혈, 혈뇨, 멍 과다)가 있으면 즉시 병원에 연락하세요.',
-   enBody:'Key precautions when taking warfarin or NOACs.\n\n• Warfarin: Keep vitamin K intake (leafy greens) consistent daily.\n• NOACs: Take at the same time each day without fail.\n• Watch for bleeding signs — contact your doctor immediately.',
+  {id:'s2',type:'info',cat:'etc',
+   koTitle:'그림판 사용 팁',enTitle:'Paint Tips',
+   koBody:'그림판을 편하게 쓰는 팁을 정리했습니다.\n\n• 실수했을 때는 실행취소(↶) 버튼을 누르세요.\n• 지우개는 흰색으로 칠하는 방식이라 배경과 자연스럽게 어울립니다.\n• 다 그린 그림은 PNG 저장 버튼으로 내려받을 수 있습니다.',
+   enBody:'A few tips for using the paint canvas.\n\n• Made a mistake? Press the undo (↶) button.\n• The eraser paints in white, blending naturally with the background.\n• Download finished drawings with the Save PNG button.',
    date:'2026-06-18',media:[],embed:''},
-  {id:'s3',type:'info',cat:'daily',
-   koTitle:'한손으로 요리하기 — 주방 보조도구 모음',enTitle:'One-Hand Cooking — Kitchen Aids Guide',
-   koBody:'편마비 환자를 위한 주방 보조도구 추천입니다.\n\n• 스파이크 보드: 식재료를 고정해 한손으로 자를 수 있게 해줍니다.\n• 무게감 있는 컵·그릇: 밀리지 않아 안정적으로 사용 가능.\n• 자동 개봉기: 병뚜껑·캔 등을 한손으로 열 수 있습니다.',
-   enBody:'Kitchen aid recommendations for hemiplegia patients.\n\n• Spike board: Secures food so you can cut with one hand.\n• Weighted cups/bowls: Stable and less likely to slide.\n• Automatic opener: Opens bottle caps and cans with one hand.',
+  {id:'s3',type:'info',cat:'sketch',
+   koTitle:'스케치 연습 기록',enTitle:'Sketch Practice Log',
+   koBody:'매일 조금씩 스케치를 연습하고 있습니다.\n\n선 긋기 연습부터 시작해서 간단한 사물, 풍경 순으로 그려볼 예정입니다. 연습한 그림은 이 게시판에 차곡차곡 모아둡니다.',
+   enBody:'Practicing sketching a little every day.\n\nStarting with line exercises, then simple objects and landscapes. Practice drawings are collected here on the board.',
    date:'2026-06-15',media:[],embed:''},
-  {id:'s4',type:'info',cat:'mental',
-   koTitle:'뇌졸중 후 우울감 — 정상 반응입니다',enTitle:"Post-Stroke Depression — It's Normal",
-   koBody:'뇌졸중 환자의 약 30~40%가 우울감을 경험합니다.\n\n■ 자가 관리\n• 매일 햇빛 보기 (최소 20분)\n• 가능한 범위 내 사회적 접촉 유지\n• 작은 성취 목표 설정과 기록\n\n■ 전문가 도움이 필요한 시점\n• 2주 이상 지속되는 무기력감',
-   enBody:"About 30–40% of stroke survivors experience depression.\n\n■ Self-Care\n• Daily sunlight exposure (at least 20 min)\n• Maintain social contact within your capacity\n• Set small achievable goals and record them\n\n■ When to Seek Help\n• Persistent low mood lasting more than 2 weeks",
-   date:'2026-06-12',media:[],embed:''},
-  {id:'s5',type:'info',cat:'diet',
-   koTitle:'연하장애 환자를 위한 식단 구성',enTitle:'Meal Planning for Dysphagia',
-   koBody:'연하장애(삼킴 장애) 환자를 위한 식단 가이드입니다.\n\n■ 점도 조절\n• 물: 점도 증진제 사용\n• 음식: 퓌레 형태 또는 부드럽게 조리\n\n■ 안전한 삼킴 자세\n• 앉은 자세 90도 유지\n• 턱을 살짝 당긴 상태에서 삼키기',
-   enBody:'Diet guide for dysphagia patients.\n\n■ Thickening\n• Liquids: Use thickening agents\n• Food: Puree form or cooked soft\n\n■ Safe Swallowing Posture\n• Maintain 90° seated position\n• Slightly chin-tuck before swallowing',
-   date:'2026-06-10',media:[],embed:''},
-  {id:'j1',type:'cartoon',cat:'',
-   koTitle:'"왼손 첫 단추"',enTitle:'"First Button with My Left Hand"',
-   koBody:'아이한테도 지는 게 억울했는데, 오늘은 해냈다.\n혼자서, 왼손으로, 단추 하나.\n\n재활 시작한 지 47일째.\n아무것도 아닌 일이 아무것도 아닌 게 아닌 날.',
-   enBody:"Lost to a toddler for weeks.\nToday I did it. Alone, with my left hand, one button.\n\nDay 47 of rehab.\nA nothing kind of moment that was anything but nothing.",
-   date:'2026-06-19',media:[],embed:''},
-  {id:'j2',type:'note',cat:'',
-   koTitle:'물리치료 3개월 메모',enTitle:'3-Month PT Notes',
-   koBody:'PT 선생님이 강조하신 핵심 3가지:\n\n1. 체중 이동 — 서 있을 때 마비측으로 의식적으로 체중 옮기기\n2. 코어 안정 — 복부에 힘 준 채로 모든 동작 수행\n3. 호흡 리듬 — 힘든 동작 시 내쉬면서 힘 주기',
-   enBody:"3 key points my PT emphasized:\n\n1. Weight shift — consciously shift to the affected side while standing\n2. Core stability — engage core throughout every movement\n3. Breathing rhythm — exhale during exertion",
-   date:'2026-06-14',media:[],embed:''},
-  {id:'j3',type:'cartoon',cat:'',
-   koTitle:'"휠체어 없이 첫 마트"',enTitle:'"First Grocery Run Without a Wheelchair"',
-   koBody:'지팡이 하나로 마트를 다 돌았다.\n다리가 후들거렸지만 이겼다.\n\n계산대 직원이 "괜찮으세요?" 물었다.\n"아, 네, 그냥 오늘 처음 해보는 거라서요."',
-   enBody:"Made it through the whole store with just my cane.\nLegs were shaking, but I won.\n\nThe cashier asked if I was okay.\n\"Yeah, it's just — first time doing this.\"",
-   date:'2026-06-07',media:[],embed:''},
 ];
 
 const DEFAULT_CATS=[
-  {id:'rehab',ko:'재활',en:'Rehab',badge:'b-teal'},
-  {id:'med',ko:'의학/약물',en:'Medical',badge:'b-blue'},
-  {id:'daily',ko:'일상보조',en:'Daily Aids',badge:'b-amber'},
-  {id:'mental',ko:'심리/정서',en:'Mental Health',badge:'b-purple'},
-  {id:'diet',ko:'식이요법',en:'Nutrition',badge:'b-green'},
+  {id:'free',ko:'자유그림',en:'Free Draw',badge:'b-teal'},
+  {id:'sketch',ko:'스케치',en:'Sketch',badge:'b-blue'},
+  {id:'color',ko:'색칠',en:'Coloring',badge:'b-purple'},
+  {id:'daily',ko:'일상',en:'Daily',badge:'b-amber'},
+  {id:'etc',ko:'기타',en:'Etc',badge:'b-gray'},
 ];
 
 const DEFAULT_NAV_NAMES={
   home:{ko:'홈',en:'Home'},
-  info:{ko:'정보',en:'Info'},
-  journal:{ko:'저널',en:'Journal'},
+  draw:{ko:'그림판',en:'Paint'},
+  info:{ko:'게시판',en:'Board'},
   admin:{ko:'관리자',en:'Admin'},
   about:{ko:'소개',en:'About'},
 };
 
 const DEFAULT_ABOUT={
-  ko:'뇌경색으로 인한 편마비를 겪으며 수집한 정보와 개인 경험을 기록하는 공간입니다.\n\n카툰과 노트 이미지로 일상을 솔직하게 담습니다. 완벽하지 않아도 괜찮습니다. 오늘 하루도 잘 하고 계십니다.',
-  en:'A space to document information and personal experiences living with stroke-induced hemiplegia.\n\nDaily life captured honestly through cartoons and note images. Imperfection is okay. You\'re doing well today.',
+  ko:'자유롭게 그린 나의 그림, 설정 모음.\n\n그림판 탭에서 그린 그림과 이런저런 설정들을 이곳에 모아둡니다. 편하게 구경해 주세요.',
+  en:'My freely drawn pictures and settings collection.\n\nDrawings made in the Paint tab and various settings are collected here. Enjoy browsing.',
 };
 
 /* posts/cats는 init()에서 Supabase로 로드 — 나머지는 localStorage 유지 */
 let posts=[];
 let cats=[...DEFAULT_CATS];
-let navNames=load('hlh_nav_names',DEFAULT_NAV_NAMES);
+let navNames=load('gp_nav_names',DEFAULT_NAV_NAMES);
 let customPages=load('hlh_custom_pages',[]);
-let aboutContent=load('hlh_about',DEFAULT_ABOUT);
+let aboutContent=load('gp_about',DEFAULT_ABOUT);
 let socialUser=load('hlh_social_user',null);
 let comments=load('hlh_comments',{});
-let lang='ko', infoFilter='all', jFilter='all', pendingMedia=[], editingPostId=null;
-let infoPage=1, jPage=1, adminPage=1;
+let lang='ko', infoFilter='all', pendingMedia=[], editingPostId=null;
+let infoPage=1, adminPage=1;
 const PAGE_SIZE=10, HOME_PIN_MAX=2, HOME_LATEST=6;
 let _dbReady=false;
 let trashedPosts=[];
@@ -1034,30 +1025,28 @@ const PROVIDER_META={
 ══════════════════════════════════════ */
 const T={
   ko:{
-    logoName:'A. Lefty Lab',logoSub:'정보 · 회복 · 일상',
-    btnWrite:'새 포스팅',heroTitle:'뇌경색 편마비, 혼자가 아닙니다',
-    heroSub:'재활 정보·일상 팁·개인 경험을 한곳에 모았습니다.',
-    s1:'정보 글',s2:'저널 포스트',homeRec:'최신 업데이트',
-    notice:'이 사이트의 정보는 의학적 조언을 대체하지 않습니다. 치료 결정은 반드시 담당 의료진과 상의하세요.',
+    logoName:'그림판',logoSub:'그림 · 갤러리 · 기록',
+    btnWrite:'새 포스팅',heroTitle:'자유롭게 그리는 나만의 그림판',
+    heroSub:'브라우저에서 그림을 그리고, 게시판에 모아보세요.',
+    s1:'게시글',homeRec:'최신 업데이트',
+    notice:'이 사이트는 자유롭게 그린 그림과 설정을 모아두는 개인 공간입니다. 즐겁게 구경해 주세요.',
     noticeBy:'운영자 공지',
-    infoSrch:'정보 검색...',jSrch:'저널 검색...',gSrch:'전체 검색...',
-    adminPanel:'관리자 대시보드',admLbl1:'정보 글',admLbl2:'저널',admLbl3:'전체',admWrite:'새 포스팅 작성',
+    infoSrch:'게시판 검색...',gSrch:'전체 검색...',
+    adminPanel:'관리자 대시보드',admLbl1:'게시글',admLbl3:'전체',admWrite:'새 포스팅 작성',
     admPostsTitle:'전체 게시물 관리',admMenuTitle:'메뉴 관리',admMenuAdd:'새 메뉴 추가',
-    admCatTitle:'카테고리 관리 (정보)',admCatAdd:'새 카테고리',
+    admCatTitle:'카테고리 관리 (게시판)',admCatAdd:'새 카테고리',
     aboutTitle:'이 사이트에 대해',aboutEditLbl:'편집',aboutSaveLbl:'저장',aboutCancelLbl:'취소',
     swStats:'사이트 현황',swLinks:'빠른 링크',
-    sl1:'정보 게시글',sl2:'저널 포스트',sl3:'최근 업데이트',
-    ql1:'응급상황 대처법',ql2:'재활병원 선택 가이드',ql3:'복지 혜택 신청',
+    sl1:'게시글',sl3:'최근 업데이트',
     loginTitle:'관리자 로그인',loginSub:'관리자 계정으로 로그인하세요',lblUid:'아이디',lblPw:'비밀번호',
     loginErr:'아이디 또는 비밀번호가 올바르지 않습니다.',doLoginBtn:'로그인',
     adminLbl:'관리자',btnLogin:'로그인',btnLogout:'로그아웃',
-    writeTitle:'새 포스팅',lblType:'포스팅 유형',lblCat:'카테고리',lblCatEdit:'카테고리 편집',
+    writeTitle:'새 포스팅',lblCat:'카테고리',lblCatEdit:'카테고리 편집',
     lblUpload:'이미지 / 동영상 업로드',lblDrop:'클릭하거나 파일을 여기에 드래그하세요',
     lblEmbed:'동영상 링크 임베드 (YouTube·Shorts·Vimeo·Instagram·Facebook)',cancel:'취소',submit:'게시하기',
     del:'삭제',edit:'편집',rename:'이름변경',
     done:'완료',inProg:'진행중',today:'오늘',
     noPost:'게시글이 없습니다',
-    cartoon:'카툰',note:'노트',
     catAddTitle:'새 카테고리 추가',
     admCommentsTitle:'댓글 관리',admNoComments:'댓글 없음',
     commentsSectionTitle:'댓글',commentsEmpty:'첫 댓글을 남겨보세요.',
@@ -1069,30 +1058,28 @@ const T={
     socialLogout:'로그아웃',confirmDelComment:'댓글을 삭제하시겠습니까?',
   },
   en:{
-    logoName:'A. Lefty Lab',logoSub:'Info · Recovery · Daily Life',
-    btnWrite:'New Post',heroTitle:"Stroke Hemiplegia — You're Not Alone",
-    heroSub:'Rehab info, daily tips, and personal experiences — bilingual KO/EN.',
-    s1:'Info Posts',s2:'Journal Entries',homeRec:'Latest Updates',
-    notice:'Information on this site does not replace medical advice. Always consult your healthcare provider.',
+    logoName:'그림판',logoSub:'Draw · Gallery · Notes',
+    btnWrite:'New Post',heroTitle:'My Own Paint — Draw Freely',
+    heroSub:'Draw in your browser and collect your pictures on the board.',
+    s1:'Posts',homeRec:'Latest Updates',
+    notice:'This site is a personal space for freely drawn pictures and settings. Enjoy browsing.',
     noticeBy:'Admin Notice',
-    infoSrch:'Search info...',jSrch:'Search journal...',gSrch:'Search all...',
-    adminPanel:'Admin Dashboard',admLbl1:'Info Posts',admLbl2:'Journal',admLbl3:'Total',admWrite:'Write New Post',
+    infoSrch:'Search board...',gSrch:'Search all...',
+    adminPanel:'Admin Dashboard',admLbl1:'Posts',admLbl3:'Total',admWrite:'Write New Post',
     admPostsTitle:'All Post Management',admMenuTitle:'Menu Management',admMenuAdd:'Add Menu',
-    admCatTitle:'Category Management (Info)',admCatAdd:'New Category',
+    admCatTitle:'Category Management (Board)',admCatAdd:'New Category',
     aboutTitle:'About This Site',aboutEditLbl:'Edit',aboutSaveLbl:'Save',aboutCancelLbl:'Cancel',
     swStats:'Site Stats',swLinks:'Quick Links',
-    sl1:'Info Posts',sl2:'Journal Entries',sl3:'Last Updated',
-    ql1:'Emergency Response',ql2:'Rehab Hospital Guide',ql3:'Welfare Benefits',
+    sl1:'Posts',sl3:'Last Updated',
     loginTitle:'Admin Login',loginSub:'Sign in with your admin account',lblUid:'Username',lblPw:'Password',
     loginErr:'Incorrect username or password.',doLoginBtn:'Login',
     adminLbl:'Admin',btnLogin:'Login',btnLogout:'Logout',
-    writeTitle:'New Post',lblType:'Post Type',lblCat:'Category',lblCatEdit:'Edit Categories',
+    writeTitle:'New Post',lblCat:'Category',lblCatEdit:'Edit Categories',
     lblUpload:'Image / Video Upload',lblDrop:'Click or drag files here',
     lblEmbed:'Video Embed (YouTube·Shorts·Vimeo·Instagram·Facebook)',cancel:'Cancel',submit:'Publish',
     del:'Delete',edit:'Edit',rename:'Rename',
     done:'Done',inProg:'In Progress',today:'Today',
     noPost:'No posts yet',
-    cartoon:'Cartoon',note:'Note',
     catAddTitle:'Add New Category',
     admCommentsTitle:'Comment Management',admNoComments:'No comments',
     commentsSectionTitle:'Comments',commentsEmpty:'Be the first to comment.',
@@ -1116,20 +1103,20 @@ function applyLang(){
   const L=T[lang];
   const map={
     'logo-name':'logoName','logo-sub':'logoSub','btn-write-lbl':'btnWrite',
-    'hero-title':'heroTitle','hero-sub':'heroSub','s1lbl':'s1','s2lbl':'s2',
+    'hero-title':'heroTitle','hero-sub':'heroSub','s1lbl':'s1',
     'home-rec-title':'homeRec','notice-txt':'notice','notice-by':'noticeBy',
-    'admin-panel-title':'adminPanel','adm-lbl1':'admLbl1','adm-lbl2':'admLbl2','adm-lbl3':'admLbl3',
+    'admin-panel-title':'adminPanel','adm-lbl1':'admLbl1','adm-lbl3':'admLbl3',
     'adm-btn-write':'admWrite','adm-posts-title':'admPostsTitle',
     'adm-menu-title':'admMenuTitle','adm-menu-add':'admMenuAdd',
     'adm-cat-title':'admCatTitle','adm-cat-add':'admCatAdd',
     'about-title':'aboutTitle','about-edit-lbl':'aboutEditLbl',
     'about-save-lbl':'aboutSaveLbl','about-cancel-lbl':'aboutCancelLbl',
     'sw-stats':'swStats','sw-links':'swLinks',
-    'sl1':'sl1','sl2':'sl2','sl3':'sl3','ql1':'ql1','ql2':'ql2','ql3':'ql3',
+    'sl1':'sl1','sl3':'sl3',
     'login-title':'loginTitle','login-sub':'loginSub','lbl-uid':'lblUid','lbl-pw':'lblPw',
     'login-err-msg':'loginErr','btn-do-login':'doLoginBtn',
     'admin-lbl':'adminLbl','btn-login-lbl':'btnLogin','btn-logout-lbl':'btnLogout',
-    'write-modal-title':'writeTitle','lbl-type':'lblType','lbl-cat':'lblCat','lbl-cat-edit':'lblCatEdit',
+    'write-modal-title':'writeTitle','lbl-cat':'lblCat','lbl-cat-edit':'lblCatEdit',
     'lbl-upload':'lblUpload','lbl-drop':'lblDrop','lbl-embed':'lblEmbed',
     'btn-cancel':'cancel','btn-submit':'submit',
     'cat-add-title':'catAddTitle',
@@ -1143,7 +1130,6 @@ function applyLang(){
   }
   document.getElementById('gs-input').placeholder=L.gSrch;
   document.getElementById('info-search').placeholder=L.infoSrch;
-  document.getElementById('journal-search').placeholder=L.jSrch;
   // Nav names from navNames store
   applyNavNames();
   // About body
@@ -1155,7 +1141,7 @@ function applyLang(){
 }
 
 function applyNavNames(){
-  const coreIds=['home','info','journal','admin','about'];
+  const coreIds=['home','draw','info','admin','about'];
   coreIds.forEach(id=>{
     const el=document.getElementById('nav-'+id);
     if(el&&navNames[id]) el.textContent=navNames[id][lang]||navNames[id].ko;
@@ -1171,7 +1157,6 @@ function applyNavNames(){
    RENDER HELPERS
 ══════════════════════════════════════ */
 function infoPosts(){return posts.filter(p=>p.type==='info');}
-function journalPosts(){return posts.filter(p=>p.type==='cartoon'||p.type==='note');}
 function titleOf(p){return lang==='ko'?p.koTitle:p.enTitle;}
 function bodyOf(p){return lang==='ko'?p.koBody:p.enBody;}
 
@@ -1185,8 +1170,7 @@ function catBadgeHtml(p){
     const c=catOf(p.cat);
     return `<span class="badge ${c.badge}">${escHtml(c.label)}</span>`;
   }
-  if(p.type==='cartoon') return `<span class="badge b-pink">${escHtml(T[lang].cartoon)}</span>`;
-  return `<span class="badge b-gray">${escHtml(T[lang].note)}</span>`;
+  return `<span class="badge b-gray">${escHtml(p.type)}</span>`;
 }
 
 function mediaGrid(p,small=true){
@@ -1241,7 +1225,7 @@ function postCard(p){
 /* ══════════════════════════════════════
    RENDER
 ══════════════════════════════════════ */
-function renderAll(){renderHome();renderInfo();renderJournal();renderInfoFilters();updateSidebar();if(isAdmin)renderAdminPanel();}
+function renderAll(){renderHome();renderInfo();renderInfoFilters();updateSidebar();if(isAdmin)renderAdminPanel();}
 
 function homePostCard(p){
   const delBtn=isAdmin?`<button class="btn btn-danger" onclick="deletePost('${p.id}',event)">${T[lang].del}</button>`:'';
@@ -1272,7 +1256,6 @@ function renderHome(){
     ?all.map(homePostCard).join('')
     :`<div class="empty"><i class="ti ti-inbox"></i>${T[lang].noPost}</div>`;
   document.getElementById('cnt-info').textContent=infoPosts().length;
-  document.getElementById('cnt-journal').textContent=journalPosts().length;
 }
 
 function renderInfo(){
@@ -1299,25 +1282,9 @@ function renderInfoFilters(){
   document.getElementById('info-filters').innerHTML=chips.join('');
 }
 
-function renderJournal(){
-  const q=document.getElementById('journal-search').value.toLowerCase();
-  const list=journalPosts().filter(p=>
-    (jFilter==='all'||p.type===jFilter)&&
-    (!q||titleOf(p).toLowerCase().includes(q)||bodyOf(p).toLowerCase().includes(q))
-  ).sort((a,b)=>b.date.localeCompare(a.date));
-  const total=list.length, pages=Math.ceil(total/PAGE_SIZE)||1;
-  jPage=Math.min(jPage,pages);
-  const slice=list.slice((jPage-1)*PAGE_SIZE, jPage*PAGE_SIZE);
-  document.getElementById('journal-list').innerHTML=slice.length
-    ?slice.map(postCard).join('')
-    :`<div class="empty"><i class="ti ti-notebook"></i>${T[lang].noPost}</div>`;
-  renderPagination('journal-pagination', jPage, pages, 'journal');
-}
-
 function renderAdminPanel(){
   const L=T[lang];
   document.getElementById('adm-cnt-info').textContent=infoPosts().length;
-  document.getElementById('adm-cnt-journal').textContent=journalPosts().length;
   document.getElementById('adm-cnt-all').textContent=posts.length;
   renderAdmMenuList();
   renderAdmCatList();
@@ -1362,7 +1329,6 @@ function renderAdminPostList(){
 
 function goPage(tab,n){
   if(tab==='info'){infoPage=n;renderInfo();}
-  else if(tab==='journal'){jPage=n;renderJournal();}
   else if(tab==='admin'){adminPage=n;renderAdminPostList();}
 }
 
@@ -1385,8 +1351,8 @@ function renderAdmMenuList(){
   const L=T[lang];
   const coreItems=[
     {id:'home',label:navNames.home[lang]||navNames.home.ko,core:true},
+    {id:'draw',label:(navNames.draw&&(navNames.draw[lang]||navNames.draw.ko))||'그림판',core:true},
     {id:'info',label:navNames.info[lang]||navNames.info.ko,core:true},
-    {id:'journal',label:navNames.journal[lang]||navNames.journal.ko,core:true},
     {id:'about',label:navNames.about[lang]||navNames.about.ko,core:true},
   ];
   const coreHtml=coreItems.map(item=>`
@@ -1419,7 +1385,6 @@ function renderAdmCatList(){
 function updateSidebar(){
   const L=T[lang];
   document.getElementById('sl1v').textContent=infoPosts().length;
-  document.getElementById('sl2v').textContent=journalPosts().length;
   const latest=[...posts].sort((a,b)=>b.date.localeCompare(a.date))[0];
   document.getElementById('sl3v').textContent=latest?(latest.date===new Date().toISOString().slice(0,10)?L.today:latest.date):'-';
 }
@@ -1440,6 +1405,140 @@ function showTab(tab){
   if(panel) panel.classList.add('on');
   if(navEl) navEl.classList.add('on');
   if(tab==='admin'&&isAdmin) renderAdminPanel();
+  if(tab==='draw') initDrawCanvas();
+}
+
+/* ══════════════════════════════════════
+   그림판 (CANVAS)
+══════════════════════════════════════ */
+let drawTool='pen', drawColor='#1a1a1a', drawWidth=4;
+let _drawing=false, _drawInited=false, _drawCssW=0, _drawCssH=0;
+const _undoStack=[], _redoStack=[], UNDO_MAX=20;
+const DRAW_PALETTE=['#1a1a1a','#A32D2D','#E8720C','#B8960B','#3B6D11','#1D9E75','#185FA5','#534AB7','#993556','#ffffff'];
+
+function drawCtx(){return document.getElementById('draw-canvas').getContext('2d');}
+
+function initDrawCanvas(){
+  if(_drawInited) return;
+  const canvas=document.getElementById('draw-canvas');
+  const wrap=canvas.parentElement;
+  const cssW=wrap.clientWidth||600;
+  const cssH=Math.min(Math.round(cssW*0.72),560);
+  const dpr=window.devicePixelRatio||1;
+  canvas.width=Math.round(cssW*dpr);
+  canvas.height=Math.round(cssH*dpr);
+  canvas.style.height=cssH+'px';
+  _drawCssW=cssW;_drawCssH=cssH;
+  const ctx=canvas.getContext('2d');
+  ctx.scale(dpr,dpr);
+  ctx.fillStyle='#fff';ctx.fillRect(0,0,cssW,cssH);
+  ctx.lineCap='round';ctx.lineJoin='round';
+  canvas.addEventListener('pointerdown',drawPointerDown);
+  canvas.addEventListener('pointermove',drawPointerMove);
+  canvas.addEventListener('pointerup',drawPointerUp);
+  canvas.addEventListener('pointercancel',drawPointerUp);
+  renderDrawPalette();
+  _drawInited=true;
+}
+
+function renderDrawPalette(){
+  document.getElementById('draw-palette').innerHTML=DRAW_PALETTE.map(c=>
+    `<button class="draw-swatch" style="background:${c}" onclick="setDrawColor('${c}')" title="${c}"></button>`).join('');
+}
+
+function setDrawTool(t){
+  drawTool=t;
+  document.getElementById('draw-tool-pen').classList.toggle('on',t==='pen');
+  document.getElementById('draw-tool-eraser').classList.toggle('on',t==='eraser');
+}
+function setDrawColor(c){
+  drawColor=c;
+  document.getElementById('draw-color').value=c;
+  setDrawTool('pen');
+}
+
+function drawPos(e){
+  const canvas=document.getElementById('draw-canvas');
+  const r=canvas.getBoundingClientRect();
+  return {x:(e.clientX-r.left)*(_drawCssW/r.width), y:(e.clientY-r.top)*(_drawCssH/r.height)};
+}
+function drawSnapshot(){
+  const canvas=document.getElementById('draw-canvas');
+  _undoStack.push(canvas.toDataURL('image/png'));
+  if(_undoStack.length>UNDO_MAX)_undoStack.shift();
+  _redoStack.length=0;
+}
+function drawRestore(dataUrl){
+  const canvas=document.getElementById('draw-canvas');
+  const ctx=drawCtx();
+  const img=new Image();
+  img.onload=()=>{
+    ctx.fillStyle='#fff';ctx.fillRect(0,0,_drawCssW,_drawCssH);
+    ctx.drawImage(img,0,0,_drawCssW,_drawCssH);
+  };
+  img.src=dataUrl;
+}
+function drawPointerDown(e){
+  e.preventDefault();
+  const canvas=document.getElementById('draw-canvas');
+  canvas.setPointerCapture(e.pointerId);
+  drawSnapshot();
+  _drawing=true;
+  const ctx=drawCtx();
+  const p=drawPos(e);
+  ctx.strokeStyle=drawTool==='eraser'?'#ffffff':drawColor;
+  ctx.lineWidth=drawTool==='eraser'?Math.max(drawWidth*2,8):drawWidth;
+  ctx.beginPath();ctx.moveTo(p.x,p.y);ctx.lineTo(p.x+0.01,p.y+0.01);ctx.stroke();
+}
+function drawPointerMove(e){
+  if(!_drawing) return;
+  const ctx=drawCtx();
+  const p=drawPos(e);
+  ctx.lineTo(p.x,p.y);ctx.stroke();
+}
+function drawPointerUp(){_drawing=false;}
+
+function drawUndo(){
+  if(!_undoStack.length) return;
+  const canvas=document.getElementById('draw-canvas');
+  _redoStack.push(canvas.toDataURL('image/png'));
+  drawRestore(_undoStack.pop());
+}
+function drawRedo(){
+  if(!_redoStack.length) return;
+  const canvas=document.getElementById('draw-canvas');
+  _undoStack.push(canvas.toDataURL('image/png'));
+  drawRestore(_redoStack.pop());
+}
+function drawClear(){
+  drawSnapshot();
+  const ctx=drawCtx();
+  ctx.fillStyle='#fff';ctx.fillRect(0,0,_drawCssW,_drawCssH);
+}
+function drawSavePng(){
+  const canvas=document.getElementById('draw-canvas');
+  canvas.toBlob(b=>{
+    if(!b) return;
+    const a=document.createElement('a');
+    a.href=URL.createObjectURL(b);
+    a.download='그림판-'+new Date().toISOString().slice(0,10)+'.png';
+    a.click();
+    setTimeout(()=>URL.revokeObjectURL(a.href),2000);
+  },'image/png');
+}
+function drawToBoard(){
+  if(!isAdmin){openLoginModal();return;}
+  const canvas=document.getElementById('draw-canvas');
+  const dataUrl=canvas.toDataURL('image/png');
+  canvas.toBlob(blob=>{
+    if(!blob) return;
+    const name='drawing-'+Date.now()+'.png';
+    const file=new File([blob],name,{type:'image/png'});
+    openWriteModal(); /* pendingMedia를 초기화하므로 반드시 먼저 호출 */
+    const m={dataUrl,mime:'image/png',name,file};
+    pendingMedia.push(m);
+    addPreviewItem(m);
+  },'image/png');
 }
 
 /* ══════════════════════════════════════
@@ -1482,10 +1581,6 @@ function closeDetailIfBg(e){if(e.target===document.getElementById('detail-overla
 /* ══════════════════════════════════════
    WRITE MODAL
 ══════════════════════════════════════ */
-function onTypeChange(){
-  document.getElementById('cat-group').style.display=
-    document.getElementById('post-type').value==='info'?'':'none';
-}
 function populateCatSelect(){
   document.getElementById('post-cat').innerHTML=cats.map(c=>`<option value="${c.id}">${lang==='ko'?c.ko:c.en} (${lang==='ko'?c.en:c.ko})</option>`).join('');
 }
@@ -1503,7 +1598,6 @@ function openWriteModal(){
   document.getElementById('embed-preview-wrap').style.display='none';
   document.getElementById('upload-preview').innerHTML='';
   pendingMedia=[];
-  onTypeChange();
   document.getElementById('write-overlay').classList.add('open');
 }
 
@@ -1514,7 +1608,6 @@ function openEditModal(id){
   document.getElementById('editing-post-id').value=id;
   document.getElementById('write-modal-title').textContent=lang==='ko'?'포스팅 수정':'Edit Post';
   populateCatSelect();
-  document.getElementById('post-type').value=p.type;
   document.getElementById('post-cat').value=p.cat||'';
   document.getElementById('post-title-ko').value=p.koTitle||'';
   document.getElementById('post-title-en').value=p.enTitle||'';
@@ -1535,7 +1628,6 @@ function openEditModal(id){
   document.getElementById('upload-preview').innerHTML='';
   pendingMedia=[];
   previewEmbed();
-  onTypeChange();
   document.getElementById('write-overlay').classList.add('open');
 }
 
@@ -1546,7 +1638,7 @@ function closeWriteModal(){
 }
 
 async function submitPost(){
-  const type=document.getElementById('post-type').value;
+  const type='info';
   const koTitle=document.getElementById('post-title-ko').value.trim();
   const enTitle=document.getElementById('post-title-en').value.trim();
   const koBody=document.getElementById('post-body-ko').value.trim();
@@ -1609,7 +1701,7 @@ async function submitPost(){
     }
     closeWriteModal();
     renderAll();
-    showTab(type==='info'?'info':'journal');
+    showTab('info');
   }
 }
 
@@ -1798,11 +1890,6 @@ function setInfoFilter(f,el){
   document.querySelectorAll('#info-filters .chip').forEach(c=>c.classList.remove('on'));
   el.classList.add('on');renderInfo();
 }
-function setJFilter(f,el){
-  jFilter=f; jPage=1;
-  document.querySelectorAll('#tab-journal .chip').forEach(c=>c.classList.remove('on'));
-  el.classList.add('on');renderJournal();
-}
 function tagSearch(tag){
   document.getElementById('info-search').value=tag.replace('#','');
   showTab('info');renderInfo();
@@ -1845,7 +1932,7 @@ function toggleAboutEdit(){
 function saveAbout(){
   aboutContent.ko=document.getElementById('about-ta-ko').value;
   aboutContent.en=document.getElementById('about-ta-en').value;
-  save('hlh_about',aboutContent);
+  save('gp_about',aboutContent);
   document.getElementById('about-edit-box').classList.remove('open');
   renderAboutBody();
 }
@@ -1949,7 +2036,7 @@ function saveRename(){
   const en=document.getElementById('rename-en').value.trim();
   if(!ko&&!en)return;
   navNames[tabId]={ko:ko||en,en:en||ko};
-  save('hlh_nav_names',navNames);
+  save('gp_nav_names',navNames);
   applyNavNames();
   closeRenameModal();
   renderAdmMenuList();
