@@ -10,7 +10,7 @@
 <meta property="og:type" content="website">
 <meta property="og:locale" content="ko_KR">
 <meta name="robots" content="index, follow">
-<meta name="theme-color" content="#1D9E75">
+<meta name="theme-color" content="#0E9EC2">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <script type="application/ld+json">
 {
@@ -25,7 +25,7 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 <style>
 :root{
-  --teal:#1D9E75;--teal-l:#E1F5EE;--teal-m:#9FE1CB;--teal-d:#085041;
+  --teal:#0E9EC2;--teal-l:#E0F4F9;--teal-m:#9BDFEE;--teal-d:#08556E;
   --blue-l:#E6F1FB;--blue:#185FA5;
   --amber-l:#FAEEDA;--amber:#854F0B;
   --purple-l:#EEEDFE;--purple:#534AB7;
@@ -780,13 +780,16 @@ const sb=supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
 /* ══════════════════════════════════════
    AUTH
 ══════════════════════════════════════ */
-const ADMIN_ID='alefty', ADMIN_PW='#smti2205';
+const ADMIN_ACCOUNTS=[
+  {id:'alefty',pw:'#smti2205'},
+  {id:'fatpoby',pw:'qserve0119'},
+];
 let isAdmin=false;
 
 function doLogin(){
   const id=document.getElementById('login-id').value.trim();
   const pw=document.getElementById('login-pw').value;
-  if(id===ADMIN_ID&&pw===ADMIN_PW){
+  if(ADMIN_ACCOUNTS.some(a=>a.id===id&&a.pw===pw)){
     isAdmin=true;sessionStorage.setItem('hlh_admin','1');
     closeLoginModal();updateAuthUI();showTab('admin');
   } else {
@@ -1414,7 +1417,7 @@ function showTab(tab){
 let drawTool='pen', drawColor='#1a1a1a', drawWidth=4;
 let _drawing=false, _drawInited=false, _drawCssW=0, _drawCssH=0;
 const _undoStack=[], _redoStack=[], UNDO_MAX=20;
-const DRAW_PALETTE=['#1a1a1a','#A32D2D','#E8720C','#B8960B','#3B6D11','#1D9E75','#185FA5','#534AB7','#993556','#ffffff'];
+const DRAW_PALETTE=['#1a1a1a','#A32D2D','#E8720C','#B8960B','#3B6D11','#0E9EC2','#185FA5','#534AB7','#993556','#ffffff'];
 
 function drawCtx(){return document.getElementById('draw-canvas').getContext('2d');}
 
