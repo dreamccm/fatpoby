@@ -755,8 +755,9 @@ select{appearance:none;cursor:pointer;}
 /* ══════════════════════════════════════
    SUPABASE CLIENT
 ══════════════════════════════════════ */
-const SUPABASE_URL='https://aimkmiuwihatvrdsyiin.supabase.co';
-const SUPABASE_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFpbWttaXV3aWhhdHZyZHN5aWluIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIyMzY3MzEsImV4cCI6MjA5NzgxMjczMX0.C4pGxWQfl1pUkOm4GROiUgokV6VDyfuE3iwPOMu7muM';
+/* 그림판 전용 Supabase 프로젝트 — 원본 사이트(aleftylab.com)의 프로젝트와 분리 운영 */
+const SUPABASE_URL='https://kzszokecpzepxotffhjl.supabase.co';
+const SUPABASE_KEY='sb_publishable_VahB99RfsM_hRAFZA3c1ig_7bz2Z6pr';
 const sb=supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
 
 /* ══════════════════════════════════════
@@ -878,15 +879,6 @@ async function loadCatsFromDB(){
     const rows=DEFAULT_CATS.map((c,i)=>({...c,display_order:i}));
     const {data:ins}=await sb.from('categories').upsert(rows,{onConflict:'id'}).select();
     if(ins?.length) cats=ins.map(r=>({id:r.id,ko:r.ko,en:r.en,badge:r.badge}));
-    return;
-  }
-  /* 리브랜딩 1회 마이그레이션: 옛 테마 카테고리가 남아 있으면 새 기본값으로 교체 */
-  const OLD_CAT_IDS=['rehab','med','mental','diet'];
-  if(data.some(r=>OLD_CAT_IDS.includes(r.id))){
-    for(const r of data) await deleteCatFromDB(r.id);
-    const rows=DEFAULT_CATS.map((c,i)=>({...c,display_order:i}));
-    await sb.from('categories').upsert(rows,{onConflict:'id'});
-    cats=[...DEFAULT_CATS];
     return;
   }
   cats=data.map(r=>({id:r.id,ko:r.ko,en:r.en,badge:r.badge}));
@@ -2511,16 +2503,6 @@ async function init(){
   }
   /* 1. Supabase에서 posts + categories 로드 */
   await Promise.all([loadPostsFromDB(), loadCatsFromDB()]);
-  /* 1-1. localStorage 마이그레이션 (DB 비어있고 localStorage에 데이터 있을 때) */
-  if(_dbReady && posts.length===0){
-    const lsPosts=load('hlh_posts2',null);
-    if(Array.isArray(lsPosts) && lsPosts.length>0){
-      const seedIds=new Set(SEED_POSTS.map(p=>p.id));
-      const toMigrate=lsPosts.filter(p=>!seedIds.has(p.id));
-      for(const p of toMigrate) await insertPostToDB(p);
-      if(toMigrate.length>0) await loadPostsFromDB();
-    }
-  }
   /* 2. 나머지 초기화 */
   if(sessionStorage.getItem('hlh_admin')==='1') isAdmin=true;
   customPages.forEach(createCustomPageDOM);
