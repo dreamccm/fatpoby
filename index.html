@@ -258,37 +258,6 @@ select{appearance:none;cursor:pointer;}
 .empty{text-align:center;padding:44px 20px;color:var(--text3);font-size:14px;}
 .empty i{font-size:30px;display:block;margin-bottom:9px;}
 
-/* Social login buttons */
-.social-grid{display:grid;grid-template-columns:1fr;gap:7px;margin-top:10px;}
-.social-btn{display:flex;align-items:center;gap:8px;padding:9px 13px;border-radius:var(--r);border:1px solid transparent;font-size:13px;cursor:pointer;font-family:inherit;transition:opacity .15s;width:100%;justify-content:center;font-weight:600;}
-.social-btn:hover{opacity:.82;}
-.social-kakao{background:#FEE500;color:#3A2929;}
-.social-naver{background:#03C75A;color:#fff;}
-.social-google{background:#fff;border-color:#ddd;color:#333;}
-.social-github{background:#24292e;color:#fff;}
-.social-facebook{background:#1877F2;color:#fff;}
-.social-linkedin{background:#0A66C2;color:#fff;}
-
-/* Comments */
-.comment-section{margin-top:22px;padding-top:18px;border-top:2px solid var(--bd);}
-.comment-section-title{font-size:14px;font-weight:700;margin-bottom:12px;display:flex;align-items:center;gap:7px;}
-.comment-login-box{background:var(--bg2);border:1px solid var(--bd);border-radius:var(--rl);padding:16px;text-align:center;}
-.comment-login-lbl{font-size:13px;color:var(--text2);font-weight:600;margin-bottom:10px;}
-.comment-item{padding:10px 12px;border-radius:var(--r);background:var(--bg2);border:1px solid var(--bd);margin-bottom:8px;}
-.comment-meta{display:flex;align-items:center;gap:7px;margin-bottom:5px;flex-wrap:wrap;}
-.cpbadge{font-size:10px;font-weight:700;padding:2px 8px;border-radius:99px;}
-.comment-author{font-size:12px;font-weight:700;color:var(--text);}
-.comment-date{font-size:11px;color:var(--text3);}
-.comment-text{font-size:13px;color:var(--text2);line-height:1.65;word-break:break-word;}
-.comment-user-bar{display:flex;align-items:center;gap:8px;padding:8px 10px;background:var(--bg2);border:1px solid var(--bd);border-radius:var(--r);margin-bottom:10px;font-size:13px;}
-.comment-form{display:flex;gap:8px;align-items:flex-end;}
-.comment-form textarea{flex:1;min-height:58px;resize:vertical;font-size:13px;}
-.comment-send-btn{padding:9px 13px;border-radius:var(--r);border:none;background:var(--teal);color:#fff;cursor:pointer;font-size:15px;flex-shrink:0;height:40px;display:flex;align-items:center;}
-.comment-send-btn:hover{background:#178a63;}
-.adm-comment-row{padding:9px 0;border-bottom:1px solid var(--bd);font-size:13px;}
-.adm-comment-row:last-child{border-bottom:none;}
-.adm-comment-post{font-size:11px;color:var(--text3);margin-bottom:3px;}
-
 /* Pagination */
 .pagination{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:14px;padding-top:14px;border-top:1px solid var(--bd);}
 .page-info{font-size:13px;color:var(--text2);}
@@ -438,15 +407,6 @@ select{appearance:none;cursor:pointer;}
       <div id="adm-cat-list"></div>
     </div>
 
-    <!-- 댓글 관리 -->
-    <div class="admin-section">
-      <div class="admin-section-title">
-        <span id="adm-comments-title">댓글 관리</span>
-        <span class="count-bdg" id="adm-comments-count">0</span>
-      </div>
-      <div id="adm-comments-list"><div class="empty" style="padding:16px"><i class="ti ti-message-off"></i><span id="adm-no-comments">댓글 없음</span></div></div>
-    </div>
-
     <!-- 게시물 관리 -->
     <div class="sec-title" style="margin-bottom:10px" id="adm-posts-title">전체 게시물 관리</div>
     <div id="admin-post-list"></div>
@@ -509,15 +469,15 @@ select{appearance:none;cursor:pointer;}
     </div>
     <div class="login-logo"><i class="ti ti-shield-lock"></i><p id="login-sub">관리자 계정으로 로그인하세요</p></div>
     <div class="form-group">
-      <label id="lbl-uid">아이디</label>
-      <input type="text" id="login-id" autocomplete="username">
+      <label id="lbl-uid">이메일</label>
+      <input type="email" id="login-id" autocomplete="email">
     </div>
     <div class="form-group">
       <label id="lbl-pw">비밀번호</label>
       <input type="password" id="login-pw" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()">
     </div>
     <div id="login-err" style="color:var(--red);font-size:12px;margin-bottom:10px;display:none">
-      <i class="ti ti-alert-circle"></i> <span id="login-err-msg">아이디 또는 비밀번호가 올바르지 않습니다.</span>
+      <i class="ti ti-alert-circle"></i> <span id="login-err-msg">이메일 또는 비밀번호가 올바르지 않습니다.</span>
     </div>
     <button class="btn btn-primary" style="width:100%;justify-content:center" onclick="doLogin()">
       <i class="ti ti-login"></i><span id="btn-do-login">로그인</span>
@@ -529,9 +489,7 @@ select{appearance:none;cursor:pointer;}
 <div class="overlay" id="detail-overlay" onclick="closeDetailIfBg(event)">
   <div class="modal detail-modal">
     <div class="modal-hd"><div></div><button class="modal-close" onclick="closeDetail()"><i class="ti ti-x"></i></button></div>
-    <input type="hidden" id="current-detail-post-id">
     <div id="detail-content"></div>
-    <div id="detail-comments"></div>
   </div>
 </div>
 
@@ -711,39 +669,6 @@ select{appearance:none;cursor:pointer;}
   </div>
 </div>
 
-<!-- SOCIAL LOGIN MODAL -->
-<div class="overlay" id="social-overlay">
-  <div class="modal" style="max-width:360px">
-    <div class="modal-hd">
-      <div class="modal-title" id="social-modal-title">소셜 로그인</div>
-      <button class="modal-close" onclick="closeSocialModal()"><i class="ti ti-x"></i></button>
-    </div>
-    <p style="font-size:13px;color:var(--text2);margin-bottom:6px" id="social-modal-sub">댓글을 남기려면 소셜 계정으로 로그인하세요.</p>
-    <div class="social-grid">
-      <button class="social-btn social-google" onclick="initSocialLogin('google')"><i class="ti ti-brand-google"></i> Google</button>
-      <button class="social-btn social-github" onclick="initSocialLogin('github')"><i class="ti ti-brand-github"></i> GitHub</button>
-      <button class="social-btn social-linkedin" onclick="initSocialLogin('linkedin')"><i class="ti ti-brand-linkedin"></i> LinkedIn</button>
-    </div>
-  </div>
-</div>
-
-<!-- SOCIAL NICKNAME MODAL -->
-<div class="overlay" id="social-nick-overlay">
-  <div class="modal" style="max-width:340px">
-    <div class="modal-hd">
-      <div class="modal-title" id="social-nick-title">닉네임 입력</div>
-      <button class="modal-close" onclick="closeSocialNickModal()"><i class="ti ti-x"></i></button>
-    </div>
-    <input type="hidden" id="social-provider-input">
-    <p style="font-size:13px;color:var(--text2);margin-bottom:12px" id="social-nick-sub">댓글에 표시될 이름을 입력하세요.</p>
-    <div class="form-group">
-      <label id="social-nick-lbl">닉네임</label>
-      <input type="text" id="social-nick-value" placeholder="닉네임을 입력하세요" onkeydown="if(event.key==='Enter')confirmSocialLogin()">
-    </div>
-    <button class="btn btn-primary" style="width:100%;justify-content:center" onclick="confirmSocialLogin()"><i class="ti ti-login"></i> <span id="social-nick-btn">로그인</span></button>
-  </div>
-</div>
-
 <!-- LIGHTBOX -->
 <div class="lightbox" id="lightbox" onclick="closeLightbox()">
   <div class="lightbox-inner" id="lb-inner">
@@ -761,43 +686,34 @@ const SUPABASE_KEY='sb_publishable_VahB99RfsM_hRAFZA3c1ig_7bz2Z6pr';
 const sb=supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
 
 /* ══════════════════════════════════════
-   OAUTH POPUP CALLBACK — must run first
+   AUTH — Supabase Auth 이메일 로그인 (관리자 UID 허용 목록)
 ══════════════════════════════════════ */
-(function(){
-  if(!window.opener || !location.hash) return;
-  const p = new URLSearchParams(location.hash.slice(1));
-  const token = p.get('access_token');
-  if(!token) return;
-  const state = p.get('state') || '';
-  window.opener.postMessage(
-    {type:'hlh_oauth_token', token, state},
-    location.origin
-  );
-  document.body.innerHTML='<p style="font-family:sans-serif;text-align:center;padding:60px;color:#555">로그인 완료 중... / Completing login...</p>';
-  setTimeout(()=>window.close(), 800);
-  throw new Error('oauth_popup_handled');
-})();
-
-/* ══════════════════════════════════════
-   AUTH
-══════════════════════════════════════ */
-const ADMIN_ACCOUNTS=[
-  {id:'alefty',pw:'#smti2205'},
-  {id:'fatpoby',pw:'qserve0119'},
+const ADMIN_UIDS=[
+  '6b416987-89bb-4b54-afaa-8ac1b43d0b15',
+  '4601b212-cf0d-4022-b989-eb41b1c48160',
 ];
 let isAdmin=false;
 
-function doLogin(){
-  const id=document.getElementById('login-id').value.trim();
-  const pw=document.getElementById('login-pw').value;
-  if(ADMIN_ACCOUNTS.some(a=>a.id===id&&a.pw===pw)){
-    isAdmin=true;sessionStorage.setItem('hlh_admin','1');
-    closeLoginModal();updateAuthUI();showTab('admin');
-  } else {
-    document.getElementById('login-err').style.display='';
-  }
+async function doLogin(){
+  const email=document.getElementById('login-id').value.trim();
+  const password=document.getElementById('login-pw').value;
+  if(!email||!password){document.getElementById('login-err').style.display='';return;}
+  try{
+    const {data,error}=await sb.auth.signInWithPassword({email,password});
+    if(!error && data?.user && ADMIN_UIDS.includes(data.user.id)){
+      isAdmin=true;
+      closeLoginModal();updateAuthUI();showTab('admin');
+      return;
+    }
+    /* 로그인은 됐지만 관리자 목록에 없는 계정이면 세션 정리 */
+    if(!error && data?.user) await sb.auth.signOut();
+  }catch(e){ console.warn('[Auth] 로그인 실패',e); }
+  document.getElementById('login-err').style.display='';
 }
-function doLogout(){isAdmin=false;sessionStorage.removeItem('hlh_admin');updateAuthUI();showTab('home');}
+async function doLogout(){
+  try{ await sb.auth.signOut(); }catch(e){ console.warn('[Auth] 로그아웃 실패',e); }
+  isAdmin=false;updateAuthUI();showTab('home');
+}
 function updateAuthUI(){
   document.getElementById('btn-write').style.display=isAdmin?'':'none';
   document.getElementById('admin-badge').style.display=isAdmin?'':'none';
@@ -1000,20 +916,11 @@ let cats=[...DEFAULT_CATS];
 let navNames=load('gp_nav_names',DEFAULT_NAV_NAMES);
 let customPages=load('hlh_custom_pages',[]);
 let aboutContent=load('gp_about',DEFAULT_ABOUT);
-let socialUser=load('hlh_social_user',null);
-let comments=load('hlh_comments',{});
 let lang='ko', infoFilter='all', pendingMedia=[], editingPostId=null;
 let infoPage=1, adminPage=1;
 const PAGE_SIZE=10, HOME_PIN_MAX=2, HOME_LATEST=6;
 let _dbReady=false;
 let trashedPosts=[];
-
-const PROVIDER_META={
-  kakao:{bg:'#FEE500',color:'#3A2929',label:'카카오'},
-  naver:{bg:'#03C75A',color:'#fff',label:'네이버'},
-  google:{bg:'#4285F4',color:'#fff',label:'Google'},
-  discord:{bg:'#5865F2',color:'#fff',label:'Discord'},
-};
 
 /* ══════════════════════════════════════
    LANGUAGE
@@ -1033,8 +940,8 @@ const T={
     aboutTitle:'이 사이트에 대해',aboutEditLbl:'편집',aboutSaveLbl:'저장',aboutCancelLbl:'취소',
     swStats:'사이트 현황',swLinks:'빠른 링크',
     sl1:'게시글',sl3:'최근 업데이트',
-    loginTitle:'관리자 로그인',loginSub:'관리자 계정으로 로그인하세요',lblUid:'아이디',lblPw:'비밀번호',
-    loginErr:'아이디 또는 비밀번호가 올바르지 않습니다.',doLoginBtn:'로그인',
+    loginTitle:'관리자 로그인',loginSub:'관리자 계정으로 로그인하세요',lblUid:'이메일',lblPw:'비밀번호',
+    loginErr:'이메일 또는 비밀번호가 올바르지 않습니다.',doLoginBtn:'로그인',
     adminLbl:'관리자',btnLogin:'로그인',btnLogout:'로그아웃',
     writeTitle:'새 포스팅',lblCat:'카테고리',lblCatEdit:'카테고리 편집',
     lblUpload:'이미지 / 동영상 업로드',lblDrop:'클릭하거나 파일을 여기에 드래그하세요',
@@ -1043,14 +950,6 @@ const T={
     done:'완료',inProg:'진행중',today:'오늘',
     noPost:'게시글이 없습니다',
     catAddTitle:'새 카테고리 추가',
-    admCommentsTitle:'댓글 관리',admNoComments:'댓글 없음',
-    commentsSectionTitle:'댓글',commentsEmpty:'첫 댓글을 남겨보세요.',
-    commentLoginLbl:'소셜 계정으로 로그인 후 댓글을 남길 수 있습니다.',
-    commentPlaceholder:'댓글을 입력하세요...',
-    socialLoginTitle:'소셜 로그인',socialLoginSub:'댓글을 남기려면 소셜 계정으로 로그인하세요.',
-    socialNickTitle:'닉네임 입력',socialNickSub:'댓글에 표시될 이름을 입력하세요.',
-    socialNickLbl:'닉네임',socialNickBtn:'로그인',
-    socialLogout:'로그아웃',confirmDelComment:'댓글을 삭제하시겠습니까?',
   },
   en:{
     logoName:'그림판',logoSub:'Draw · Gallery · Notes',
@@ -1066,8 +965,8 @@ const T={
     aboutTitle:'About This Site',aboutEditLbl:'Edit',aboutSaveLbl:'Save',aboutCancelLbl:'Cancel',
     swStats:'Site Stats',swLinks:'Quick Links',
     sl1:'Posts',sl3:'Last Updated',
-    loginTitle:'Admin Login',loginSub:'Sign in with your admin account',lblUid:'Username',lblPw:'Password',
-    loginErr:'Incorrect username or password.',doLoginBtn:'Login',
+    loginTitle:'Admin Login',loginSub:'Sign in with your admin account',lblUid:'Email',lblPw:'Password',
+    loginErr:'Incorrect email or password.',doLoginBtn:'Login',
     adminLbl:'Admin',btnLogin:'Login',btnLogout:'Logout',
     writeTitle:'New Post',lblCat:'Category',lblCatEdit:'Edit Categories',
     lblUpload:'Image / Video Upload',lblDrop:'Click or drag files here',
@@ -1076,14 +975,6 @@ const T={
     done:'Done',inProg:'In Progress',today:'Today',
     noPost:'No posts yet',
     catAddTitle:'Add New Category',
-    admCommentsTitle:'Comment Management',admNoComments:'No comments',
-    commentsSectionTitle:'Comments',commentsEmpty:'Be the first to comment.',
-    commentLoginLbl:'Log in with a social account to comment.',
-    commentPlaceholder:'Write a comment...',
-    socialLoginTitle:'Social Login',socialLoginSub:'Log in with a social account to comment.',
-    socialNickTitle:'Enter Nickname',socialNickSub:'Enter the name to display on your comment.',
-    socialNickLbl:'Nickname',socialNickBtn:'Login',
-    socialLogout:'Logout',confirmDelComment:'Delete this comment?',
   }
 };
 
@@ -1115,10 +1006,6 @@ function applyLang(){
     'lbl-upload':'lblUpload','lbl-drop':'lblDrop','lbl-embed':'lblEmbed',
     'btn-cancel':'cancel','btn-submit':'submit',
     'cat-add-title':'catAddTitle',
-    'adm-comments-title':'admCommentsTitle','adm-no-comments':'admNoComments',
-    'social-modal-title':'socialLoginTitle','social-modal-sub':'socialLoginSub',
-    'social-nick-title':'socialNickTitle','social-nick-sub':'socialNickSub',
-    'social-nick-lbl':'socialNickLbl','social-nick-btn':'socialNickBtn',
   };
   for(const [id,key] of Object.entries(map)){
     const el=document.getElementById(id);if(el)el.textContent=L[key]||'';
@@ -1283,7 +1170,6 @@ function renderAdminPanel(){
   document.getElementById('adm-cnt-all').textContent=posts.length;
   renderAdmMenuList();
   renderAdmCatList();
-  renderAdminComments();
   renderAdminPostList();
   renderTrashList();
 }
@@ -1552,7 +1438,6 @@ async function openDetail(id){
       adminBtns=`<button class="btn btn-danger btn-sm" onclick="deletePost('${p.id}',event);closeDetail()">${L.del}</button>`;
     }
   }
-  document.getElementById('current-detail-post-id').value=id;
   document.getElementById('detail-content').innerHTML=`
     <div style="margin-bottom:6px">${catBadgeHtml(p)}${isTrashed?`<span style="font-size:11px;color:var(--red);margin-left:6px"><i class="ti ti-trash"></i> 휴지통</span>`:''}</div>
     <div class="detail-title">${escHtml(titleOf(p))}</div>
@@ -1560,16 +1445,10 @@ async function openDetail(id){
     <div class="detail-body">${renderBodyHtml(bodyOf(p))}</div>
     ${mediaGrid(p,false)}
     ${embedHtml(p.embed)}`;
-  document.getElementById('detail-comments').innerHTML=
-    isTrashed?'':
-    `<div class="comment-section"><div style="text-align:center;padding:16px;color:var(--text3);font-size:13px">댓글 로딩 중...</div></div>`;
   document.getElementById('detail-overlay').classList.add('open');
-  if(!isTrashed && _dbReady) await loadCommentsForPost(id);
-  if(!isTrashed) document.getElementById('detail-comments').innerHTML=renderCommentSection(id);
 }
 function closeDetail(){
   document.getElementById('detail-overlay').classList.remove('open');
-  document.getElementById('current-detail-post-id').value='';
 }
 function closeDetailIfBg(e){if(e.target===document.getElementById('detail-overlay'))closeDetail();}
 
@@ -2085,299 +1964,6 @@ async function deleteCategory(id){
   renderAdmCatList();
 }
 
-/* ══════════════════════════════════════
-   COMMENT DB HELPERS
-══════════════════════════════════════ */
-async function insertCommentToDB(postId, c){
-  const {data,error}=await sb.from('comments').insert([{
-    post_id:postId,
-    provider:c.provider,
-    display_name:c.displayName,
-    body:c.text,
-  }]).select().single();
-  if(error){console.warn('[Supabase] 댓글 저장 실패',error);return null;}
-  return data.id;
-}
-
-async function deleteCommentFromDB(commentId){
-  const {error}=await sb.from('comments').delete().eq('id',commentId);
-  if(error) console.warn('[Supabase] 댓글 삭제 실패',error);
-}
-
-async function loadCommentsForPost(postId){
-  const {data,error}=await sb.from('comments')
-    .select('*')
-    .eq('post_id',postId)
-    .order('created_at',{ascending:true});
-  if(error){console.warn('[Supabase] 댓글 로드 실패',error);return;}
-  comments[postId]=(data||[]).map(r=>({
-    id:r.id, postId:r.post_id, provider:r.provider,
-    displayName:r.display_name, uid:'',
-    text:r.body||'', date:r.created_at?.slice(0,10)||'',
-  }));
-}
-
-async function loadAllCommentsFromDB(){
-  const {data,error}=await sb.from('comments')
-    .select('*')
-    .order('created_at',{ascending:false})
-    .limit(300);
-  if(error){console.warn('[Supabase] 전체 댓글 로드 실패',error);return null;}
-  /* postId별로 그룹핑하여 캐시 갱신 */
-  const grouped={};
-  (data||[]).forEach(r=>{
-    const c={id:r.id,postId:r.post_id,provider:r.provider,
-              displayName:r.display_name,uid:'',text:r.body||'',date:r.created_at?.slice(0,10)||''};
-    (grouped[r.post_id]||(grouped[r.post_id]=[])).push(c);
-  });
-  Object.assign(comments,grouped);
-  return data;
-}
-
-/* ══════════════════════════════════════
-   OAUTH CONFIG
-   ── 아래 빈 문자열('')에 각 플랫폼 키를 입력하면 실제 OAuth 로그인이 활성화됩니다.
-   ── 키가 없는 플랫폼은 아이디 직접 입력(미인증) 방식으로 동작합니다.
-
-   [Google]  console.cloud.google.com → API 및 서비스 → 사용자 인증 정보
-             → OAuth 2.0 클라이언트 ID (웹 애플리케이션)
-             → 승인된 JavaScript 원본: http://localhost:3000
-   [카카오]  developers.kakao.com → 내 애플리케이션 → 앱 키 → JavaScript 키
-             → 플랫폼 → Web → 사이트 도메인: http://localhost:3000
-   [Naver]   developers.naver.com → 애플리케이션 등록 → 네아로 선택
-             → 서비스 URL: http://localhost:3000
-             → Callback URL: http://localhost:3000/
-   [Discord] discord.com/developers/applications → OAuth2
-             → Redirects: http://localhost:3000/
-══════════════════════════════════════ */
-const OAUTH = {
-  google:  { clientId: '' },
-  kakao:   { appKey:   'c481084293fcbc51850047061e1d736a' },
-  naver:   { clientId: '' },
-  discord: { clientId: '' },
-};
-const OAUTH_REDIRECT = window.location.origin + '/';
-function hasOAuthKey(p){ const o=OAUTH[p]; return !!(o&&(o.clientId||o.appKey)); }
-
-function loadScript(src){
-  return new Promise((res,rej)=>{
-    if(document.querySelector(`script[src="${src}"]`)){res();return;}
-    const s=document.createElement('script');s.src=src;s.async=true;
-    s.onload=res;s.onerror=rej;document.head.appendChild(s);
-  });
-}
-
-/* OAuth implicit-grant popup message listener (Naver, Discord) */
-window.addEventListener('message', async(e)=>{
-  if(e.origin!==window.location.origin) return;
-  if(e.data?.type!=='hlh_oauth_token') return;
-  const {token,state}=e.data;
-  const provider=state.split('__')[0];
-  if(!provider) return;
-  await fetchImplicitProfile(provider, token);
-});
-
-async function fetchImplicitProfile(provider, token){
-  try{
-    if(provider==='naver'){
-      const r=await fetch('https://openapi.naver.com/v1/nid/me',{headers:{Authorization:'Bearer '+token}});
-      const d=await r.json();
-      const name=d.response?.name||d.response?.nickname||d.response?.email;
-      if(name){ completeSocialLogin('naver',name,d.response?.id); return; }
-    }
-    if(provider==='discord'){
-      const r=await fetch('https://discord.com/api/v10/users/@me',{headers:{Authorization:'Bearer '+token}});
-      const d=await r.json();
-      const name=d.global_name||d.username;
-      if(name){ completeSocialLogin('discord',name,d.id); return; }
-    }
-  }catch(err){ console.warn('OAuth profile fetch failed',err); }
-  showNickModal(provider);
-}
-
-function openOAuthPopup(url){
-  const w=500,h=640,l=(screen.width-w)/2,t=(screen.height-h)/2;
-  window.open(url,'hlh_oauth',`width=${w},height=${h},left=${l},top=${t},menubar=no,toolbar=no`);
-}
-
-/* ── Google (Supabase OAuth redirect) ── */
-async function doLoginGoogle(){
-  if(!sb){ showNickModal('google'); return; }
-  await sb.auth.signInWithOAuth({
-    provider:'google',
-    options:{ redirectTo: window.location.origin+window.location.pathname }
-  });
-}
-
-/* ── Kakao (Supabase OAuth redirect) ── */
-async function doLoginKakao(){
-  if(!sb){ showNickModal('kakao'); return; }
-  await sb.auth.signInWithOAuth({
-    provider:'kakao',
-    options:{
-      redirectTo: window.location.origin+window.location.pathname,
-      scopes: 'profile_nickname profile_image',
-    }
-  });
-}
-
-/* ── LinkedIn (Supabase OAuth redirect) ── */
-async function doLoginLinkedin(){
-  if(!sb){ showNickModal('linkedin'); return; }
-  await sb.auth.signInWithOAuth({
-    provider:'linkedin_oidc',
-    options:{ redirectTo: window.location.origin+window.location.pathname }
-  });
-}
-
-/* ── GitHub (Supabase OAuth redirect) ── */
-async function doLoginGithub(){
-  if(!sb){ showNickModal('github'); return; }
-  await sb.auth.signInWithOAuth({
-    provider:'github',
-    options:{ redirectTo: window.location.origin+window.location.pathname }
-  });
-}
-
-/* ── Facebook (Supabase OAuth redirect) ── */
-async function doLoginFacebook(){
-  if(!sb){ showNickModal('facebook'); return; }
-  await sb.auth.signInWithOAuth({
-    provider:'facebook',
-    options:{ redirectTo: window.location.origin+window.location.pathname }
-  });
-}
-
-/* ── Discord (implicit grant popup) ── */
-function doLoginDiscord(){
-  if(!hasOAuthKey('discord')){ showNickModal('discord'); return; }
-  const state='discord__'+Math.random().toString(36).slice(2);
-  const url=`https://discord.com/oauth2/authorize?response_type=token&client_id=${OAUTH.discord.clientId}&redirect_uri=${encodeURIComponent(OAUTH_REDIRECT)}&scope=identify&state=${state}`;
-  openOAuthPopup(url);
-}
-
-async function completeSocialLogin(provider, displayName, uid){
-  socialUser={provider, displayName, uid: uid||provider+'_'+Date.now()};
-  save('hlh_social_user', socialUser);
-  closeSocialModal(); closeSocialNickModal();
-  document.getElementById('g-signin-wrap')?.remove();
-  const postId=document.getElementById('current-detail-post-id').value;
-  if(postId){
-    if(_dbReady) await loadCommentsForPost(postId);
-    document.getElementById('detail-comments').innerHTML=renderCommentSection(postId);
-  }
-}
-
-/* ── Modal helpers ── */
-function openSocialModal(){ document.getElementById('social-overlay').classList.add('open'); }
-function closeSocialModal(){ document.getElementById('social-overlay').classList.remove('open'); }
-function closeSocialNickModal(){ document.getElementById('social-nick-overlay').classList.remove('open'); }
-
-function showNickModal(provider){
-  closeSocialModal();
-  document.getElementById('social-provider-input').value=provider;
-  const pm=PROVIDER_META[provider]||{bg:'#888',color:'#fff',label:provider};
-  const needsKey=!hasOAuthKey(provider)&&['google','kakao','naver','discord'].includes(provider);
-  const subHtml=needsKey
-    ?`<span style="color:var(--amber);font-size:11px">⚠ OAuth 키 미설정 — ${pm.label} 아이디를 직접 입력하세요</span>`
-    :(provider==='github'?`<span style="font-size:12px;color:var(--text2)">GitHub 사용자명을 입력하세요 (OAuth 미지원)</span>`
-    :provider==='apple'?`<span style="font-size:12px;color:var(--text2)">Apple ID 이메일을 입력하세요 (OAuth 미지원)</span>`
-    :T[lang].socialNickSub);
-  document.getElementById('social-nick-title').innerHTML=
-    `<span style="display:inline-flex;align-items:center;gap:8px">
-      <span style="background:${pm.bg};color:${pm.color};font-size:10px;font-weight:700;padding:2px 9px;border-radius:99px">${pm.label}</span>
-      ${T[lang].socialNickTitle}
-    </span>`;
-  document.getElementById('social-nick-sub').innerHTML=subHtml;
-  document.getElementById('social-nick-value').value='';
-  document.getElementById('social-nick-overlay').classList.add('open');
-  setTimeout(()=>document.getElementById('social-nick-value').focus(),80);
-}
-
-function initSocialLogin(provider){
-  closeSocialModal();
-  ({google:doLoginGoogle,github:doLoginGithub,facebook:doLoginFacebook,linkedin:doLoginLinkedin})[provider]?.();
-}
-
-function confirmSocialLogin(){
-  const provider=document.getElementById('social-provider-input').value;
-  const displayName=document.getElementById('social-nick-value').value.trim();
-  if(!displayName){ alert(lang==='ko'?'아이디/닉네임을 입력해주세요.':'Please enter your ID or nickname.'); return; }
-  completeSocialLogin(provider, displayName);
-}
-
-async function socialLogout(){
-  socialUser=null;
-  localStorage.removeItem('hlh_social_user');
-  const postId=document.getElementById('current-detail-post-id').value;
-  if(postId){
-    if(_dbReady) await loadCommentsForPost(postId);
-    document.getElementById('detail-comments').innerHTML=renderCommentSection(postId);
-  }
-}
-
-function providerBadgeHtml(provider){
-  const pm=PROVIDER_META[provider]||{bg:'#888',color:'#fff',label:provider};
-  return `<span class="cpbadge" style="background:${pm.bg};color:${pm.color}">${pm.label}</span>`;
-}
-
-/* ══════════════════════════════════════
-   COMMENTS
-══════════════════════════════════════ */
-function renderCommentSection(postId){
-  const L=T[lang];
-  const list=(comments[postId]||[]).slice().sort((a,b)=>a.date.localeCompare(b.date));
-  const p=posts.find(x=>x.id===postId);
-
-  let html=`<div class="comment-section">
-    <div class="comment-section-title">
-      <i class="ti ti-message-circle"></i> ${L.commentsSectionTitle}
-      <span class="count-bdg">${list.length}</span>
-    </div>`;
-
-  if(list.length){
-    html+=list.map(c=>{
-      const adminDel=isAdmin
-        ?`<button class="btn btn-danger" style="padding:2px 7px;font-size:10px;margin-left:auto" onclick="deleteComment('${postId}','${c.id}',event)"><i class="ti ti-trash"></i></button>`:'';
-      return `<div class="comment-item">
-        <div class="comment-meta">
-          ${providerBadgeHtml(c.provider)}
-          <span class="comment-author">${escHtml(c.displayName)}</span>
-          <span class="comment-date">${c.date}</span>
-          ${adminDel}
-        </div>
-        <div class="comment-text">${escHtml(c.text).replace(/\n/g,'<br>')}</div>
-      </div>`;
-    }).join('');
-  } else {
-    html+=`<div style="font-size:13px;color:var(--text3);text-align:center;padding:14px 0">${L.commentsEmpty}</div>`;
-  }
-
-  if(socialUser){
-    html+=`<div class="comment-user-bar">
-      ${providerBadgeHtml(socialUser.provider)}
-      <strong>${escHtml(socialUser.displayName)}</strong>
-      <button class="btn btn-xs" onclick="socialLogout()" style="margin-left:auto">${L.socialLogout}</button>
-    </div>
-    <div class="comment-form">
-      <textarea id="cmt-input-${postId}" placeholder="${L.commentPlaceholder}" rows="2"
-        onkeydown="if(event.key==='Enter'&&(event.ctrlKey||event.metaKey))submitComment('${postId}')"></textarea>
-      <button class="comment-send-btn" onclick="submitComment('${postId}')"><i class="ti ti-send"></i></button>
-    </div>`;
-  } else {
-    html+=`<div class="comment-login-box">
-      <div class="comment-login-lbl">${L.commentLoginLbl}</div>
-      <div class="social-grid">
-        <button class="social-btn social-google" onclick="initSocialLogin('google')"><i class="ti ti-brand-google"></i> Google</button>
-        <button class="social-btn social-github" onclick="initSocialLogin('github')"><i class="ti ti-brand-github"></i> GitHub</button>
-        <button class="social-btn social-linkedin" onclick="initSocialLogin('linkedin')"><i class="ti ti-brand-linkedin"></i> LinkedIn</button>
-      </div>
-    </div>`;
-  }
-  html+=`</div>`;
-  return html;
-}
-
 function escHtml(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 function linkify(escapedHtml){
   return escapedHtml.replace(/((https?:\/\/)[^\s<]+)/g,url=>{
@@ -2404,76 +1990,6 @@ function wrapSelection(textareaId,marker){
   ta.dispatchEvent(new Event('input'));
 }
 
-async function submitComment(postId){
-  if(!socialUser)return;
-  const ta=document.getElementById('cmt-input-'+postId);
-  const text=ta?ta.value.trim():'';
-  if(!text)return;
-  const c={
-    id:'c'+Date.now(),
-    provider:socialUser.provider,
-    displayName:socialUser.displayName,
-    uid:socialUser.uid,
-    text,
-    date:new Date().toISOString().slice(0,10),
-  };
-  if(!comments[postId]) comments[postId]=[];
-  if(_dbReady){
-    const dbId=await insertCommentToDB(postId,c);
-    if(dbId) c.id=dbId;
-  } else {
-    save('hlh_comments',comments);
-  }
-  comments[postId].push(c);
-  document.getElementById('detail-comments').innerHTML=renderCommentSection(postId);
-  if(isAdmin) renderAdminComments();
-}
-
-async function deleteComment(postId,commentId,e){
-  if(e) e.stopPropagation();
-  if(!confirm(T[lang].confirmDelComment))return;
-  comments[postId]=(comments[postId]||[]).filter(c=>c.id!==commentId);
-  if(!comments[postId].length) delete comments[postId];
-  if(_dbReady) await deleteCommentFromDB(commentId);
-  else save('hlh_comments',comments);
-  const pid=document.getElementById('current-detail-post-id').value;
-  if(pid===postId) document.getElementById('detail-comments').innerHTML=renderCommentSection(postId);
-  if(isAdmin) renderAdminComments();
-}
-
-async function renderAdminComments(){
-  const L=T[lang];
-  const listEl=document.getElementById('adm-comments-list');
-  if(!listEl) return;
-
-  if(_dbReady) await loadAllCommentsFromDB();
-
-  const allComments=[];
-  Object.entries(comments).forEach(([postId,cmts])=>{
-    const p=posts.find(x=>x.id===postId);
-    cmts.forEach(c=>allComments.push({...c,postId,postTitle:p?titleOf(p):'(삭제된 글)'}));
-  });
-  allComments.sort((a,b)=>b.date.localeCompare(a.date));
-  const total=allComments.length;
-  const countEl=document.getElementById('adm-comments-count');
-  if(countEl) countEl.textContent=total;
-  if(!total){
-    listEl.innerHTML=`<div class="empty" style="padding:16px"><i class="ti ti-message-off"></i><span>${L.admNoComments}</span></div>`;
-    return;
-  }
-  listEl.innerHTML=allComments.map(c=>`
-    <div class="adm-comment-row">
-      <div class="adm-comment-post"><i class="ti ti-article" style="font-size:11px"></i> ${escHtml(c.postTitle)}</div>
-      <div class="comment-meta" style="margin-bottom:4px">
-        ${providerBadgeHtml(c.provider)}
-        <span class="comment-author">${escHtml(c.displayName)}</span>
-        <span class="comment-date">${c.date}</span>
-        <button class="btn btn-danger" style="padding:2px 7px;font-size:10px;margin-left:auto" onclick="deleteComment('${c.postId}','${c.id}',event)">${L.del}</button>
-      </div>
-      <div class="comment-text">${escHtml(c.text).replace(/\n/g,'<br>')}</div>
-    </div>`).join('');
-}
-
 /* ══════════════════════════════════════
    KEYBOARD
 ══════════════════════════════════════ */
@@ -2481,7 +1997,6 @@ document.addEventListener('keydown',e=>{
   if(e.key==='Escape'){
     closeLoginModal();closeWriteModal();closeDetail();closeLightbox();
     closeMenuModal();closeRenameModal();closeCatModal();cancelAboutEdit();
-    closeSocialModal();closeSocialNickModal();
   }
 });
 
@@ -2489,22 +2004,16 @@ document.addEventListener('keydown',e=>{
    INIT
 ══════════════════════════════════════ */
 async function init(){
-  /* 0. Supabase OAuth 콜백 처리 (카카오 로그인 후 리다이렉트) */
+  /* 0. 세션 복원 — Supabase Auth 세션의 UID가 관리자 목록에 있으면 로그인 유지 */
   if(sb){
-    const {data:{session}}=await sb.auth.getSession();
-    if(session?.user){
-      const u=session.user;
-      const name=u.user_metadata?.name||u.user_metadata?.full_name||u.user_metadata?.preferred_username||u.email||u.id;
-      if(!socialUser){
-        socialUser={provider:u.app_metadata?.provider||'kakao', displayName:name, uid:u.id};
-        save('hlh_social_user', socialUser);
-      }
-    }
+    try{
+      const {data:{session}}=await sb.auth.getSession();
+      if(session?.user && ADMIN_UIDS.includes(session.user.id)) isAdmin=true;
+    }catch(e){ console.warn('[Auth] 세션 확인 실패',e); }
   }
   /* 1. Supabase에서 posts + categories 로드 */
   await Promise.all([loadPostsFromDB(), loadCatsFromDB()]);
   /* 2. 나머지 초기화 */
-  if(sessionStorage.getItem('hlh_admin')==='1') isAdmin=true;
   customPages.forEach(createCustomPageDOM);
   applyLang();
   updateAuthUI();
