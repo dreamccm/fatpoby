@@ -47,11 +47,18 @@ create table if not exists public.post_media (
   display_order int  not null default 0
 );
 
+-- 사이트 설정: 소개(about)·메뉴 이름(nav_names)·커스텀 페이지(custom_pages)
+create table if not exists public.site_settings (
+  key   text primary key,
+  value jsonb not null
+);
+
 -- 2. RLS: 읽기 공개 / 쓰기는 관리자 UID만 -------------------------
 
-alter table public.categories enable row level security;
-alter table public.posts      enable row level security;
-alter table public.post_media enable row level security;
+alter table public.categories    enable row level security;
+alter table public.posts         enable row level security;
+alter table public.post_media    enable row level security;
+alter table public.site_settings enable row level security;
 
 -- 이전 버전의 허용 정책 제거
 drop policy if exists "public read categories"  on public.categories;
@@ -64,10 +71,13 @@ drop policy if exists "public write post_media" on public.post_media;
 drop policy if exists "admin write categories" on public.categories;
 drop policy if exists "admin write posts"      on public.posts;
 drop policy if exists "admin write post_media" on public.post_media;
+drop policy if exists "public read site_settings" on public.site_settings;
+drop policy if exists "admin write site_settings" on public.site_settings;
 
-create policy "public read categories" on public.categories for select using (true);
-create policy "public read posts"      on public.posts      for select using (true);
-create policy "public read post_media" on public.post_media for select using (true);
+create policy "public read categories"    on public.categories    for select using (true);
+create policy "public read posts"         on public.posts         for select using (true);
+create policy "public read post_media"    on public.post_media    for select using (true);
+create policy "public read site_settings" on public.site_settings for select using (true);
 
 create policy "admin write categories" on public.categories for all to authenticated
   using (auth.uid() in ('6b416987-89bb-4b54-afaa-8ac1b43d0b15'::uuid,'4601b212-cf0d-4022-b989-eb41b1c48160'::uuid))
@@ -78,6 +88,10 @@ create policy "admin write posts" on public.posts for all to authenticated
   with check (auth.uid() in ('6b416987-89bb-4b54-afaa-8ac1b43d0b15'::uuid,'4601b212-cf0d-4022-b989-eb41b1c48160'::uuid));
 
 create policy "admin write post_media" on public.post_media for all to authenticated
+  using (auth.uid() in ('6b416987-89bb-4b54-afaa-8ac1b43d0b15'::uuid,'4601b212-cf0d-4022-b989-eb41b1c48160'::uuid))
+  with check (auth.uid() in ('6b416987-89bb-4b54-afaa-8ac1b43d0b15'::uuid,'4601b212-cf0d-4022-b989-eb41b1c48160'::uuid));
+
+create policy "admin write site_settings" on public.site_settings for all to authenticated
   using (auth.uid() in ('6b416987-89bb-4b54-afaa-8ac1b43d0b15'::uuid,'4601b212-cf0d-4022-b989-eb41b1c48160'::uuid))
   with check (auth.uid() in ('6b416987-89bb-4b54-afaa-8ac1b43d0b15'::uuid,'4601b212-cf0d-4022-b989-eb41b1c48160'::uuid));
 
